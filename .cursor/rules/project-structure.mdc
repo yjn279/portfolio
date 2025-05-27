@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# ポートフォリオプロジェクト構造ガイド
+
+## プロジェクト概要
+React Router v7、Cloudflare、shadcn/uiを使用したモダンなポートフォリオサイトです。TypeScript、pnpm（パッケージ管理）、Volta（Node.jsバージョン管理）を使用しています。
+
+## 主要技術
+- **フレームワーク**: React Router v7 + Cloudflareデプロイ
+- **UIライブラリ**: shadcn/ui コンポーネント + Tailwind CSS v4
+- **ビルドツール**: Vite + TypeScript
+- **パッケージマネージャー**: pnpm（Volta管理）
+- **デプロイ**: Cloudflare
+
+## プロジェクト構造
+- **エントリーポイント**: [root.tsx](mdc:app/root.tsx) がメインのアプリエントリーポイント
+- **ルーティング**: [routes.ts](mdc:app/routes.ts) でルートを定義、[app/routes/](mdc:app/routes) で整理
+- **コンポーネント**: UIコンポーネントは [app/components/ui/](mdc:app/components/ui) に配置（shadcn/ui）
+- **スタイル**: [app.css](mdc:app/app.css) でグローバルスタイル + Tailwind CSS
+- **設定ファイル**: 
+  - [tsconfig.cloudflare.json](mdc:tsconfig.cloudflare.json) - TypeScript設定
+  - [vite.config.ts](mdc:vite.config.ts) - Vite設定
+  - [wrangler.jsonc](mdc:wrangler.jsonc) - Cloudflareデプロイ設定
+
+## インポートエイリアス
+- `@/*` を使用してappディレクトリからインポート
+- 例: `import { Button } from "@/components/ui/button"`
+
+## 開発ワークフロー
+- `pnpm dev` で開発サーバー起動
+- `pnpm build` で本番用ビルド
+- `pnpm deploy` でCloudflareにデプロイ
+
+## ファイル整理
+- ルートコンポーネントは `app/routes/` に配置
+- 再利用可能なコンポーネントは `app/components/` に配置
+- ユーティリティ関数は `app/lib/` に配置
+- 静的アセットは `public/` に配置

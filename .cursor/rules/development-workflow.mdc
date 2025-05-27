@@ -1,0 +1,79 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 開発ワークフロー & ベストプラクティス
+
+## パッケージ管理
+- **pnpmを常に使用**: Voltaによる一貫したバージョン管理
+- **Node.jsバージョン**: 最新LTS（[package.json](mdc:package.json)でVolta固定）
+- **依存関係**: `pnpm dlx shadcn@latest add [コンポーネント]` でUIコンポーネント追加
+
+## 開発コマンド
+```bash
+# 開発サーバー起動
+pnpm dev
+
+# 型チェック
+pnpm typecheck
+
+# 本番ビルド
+pnpm build
+
+# Cloudflareデプロイ
+pnpm deploy
+
+# shadcn/uiコンポーネント追加
+pnpm dlx shadcn@latest add [コンポーネント名]
+```
+
+## Gitワークフロー
+- 慣例的なコミット形式を使用
+- 新機能用のフィーチャーブランチ作成
+- コミット前の十分なテスト
+- アトミックで分かりやすいコミットメッセージ
+
+## コンポーネント開発
+1. **新しいコンポーネント** は `app/components/` ディレクトリに作成
+2. **TypeScriptインターフェース** をprops定義に使用
+3. **名前付きエクスポート** でコンポーネントをエクスポート
+4. **JSDocコメント** で適切なドキュメント追加
+5. **可能な限り分離してテスト**
+
+## スタイリングガイドライン
+- **Tailwind CSS v4**: 主にユーティリティクラスを使用
+- **カスタムCSS**: Tailwindユーティリティで不十分な場合のみ
+- **CSS変数**: テーマカラーは[app.css](mdc:app/app.css)で定義
+- **レスポンシブデザイン**: Tailwindブレークポイントでモバイルファーストアプローチ
+
+## ファイル命名規則
+- kebab-case
+- **型**: `.types.ts` サフィックス
+
+## インポート整理
+```typescript
+// 1. Reactと外部ライブラリ
+import React from 'react'
+import { Button } from '@/components/ui/button'
+
+// 2. 内部コンポーネントとユーティリティ
+import { ProfileCard } from '@/components/ProfileCard'
+import { cn } from '@/lib/utils'
+
+// 3. 型とインターフェース
+import type { User } from '@/types/user.types'
+```
+
+## エラーハンドリング
+- コンポーネントレベルエラーにはReact Error Boundariesを使用
+- 適切なTypeScriptエラー型の実装
+- ユーザーフレンドリーなエラーメッセージを追加
+- デバッグ用の適切なエラーログ
+
+## アクセシビリティ
+- セマンティックHTML要素を使用
+- 適切なARIAラベルを追加
+- キーボードナビゲーションが動作することを確認
+- スクリーンリーダーでテスト
+- 十分なカラーコントラスト比を維持
