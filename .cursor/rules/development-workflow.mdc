@@ -22,7 +22,7 @@ pnpm typecheck
 pnpm build
 
 # Cloudflareデプロイ
-pnpm deploy
+pnpm run deploy
 
 # shadcn/uiコンポーネント追加
 pnpm dlx shadcn@latest add [コンポーネント名]
