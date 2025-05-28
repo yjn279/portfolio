@@ -13,6 +13,9 @@ import {
   MapPin,
   Calendar,
   Clock,
+  ChevronDown,
+  ArrowRight,
+  Building,
 } from "lucide-react"
 
 export function meta({}: Route.MetaArgs) {
@@ -78,6 +81,30 @@ export default function Portfolio() {
     },
   ]
 
+  const experiences = [
+    {
+      company: "Tech Startup Inc.",
+      position: "Senior Full Stack Engineer",
+      period: "2022 - Present",
+      description: "React/Next.jsとNode.jsを使用したWebアプリケーション開発をリード",
+      technologies: ["React", "Next.js", "TypeScript", "Node.js", "AWS"],
+    },
+    {
+      company: "Digital Agency Co.",
+      position: "Frontend Engineer",
+      period: "2020 - 2022",
+      description: "企業向けWebサイトとECサイトの開発・保守",
+      technologies: ["Vue.js", "Nuxt.js", "JavaScript", "SCSS"],
+    },
+    {
+      company: "Web Solutions Ltd.",
+      position: "Junior Developer",
+      period: "2019 - 2020",
+      description: "HTML/CSS/JavaScriptを使用したWebサイト制作",
+      technologies: ["HTML", "CSS", "JavaScript", "jQuery"],
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
       {/* Header */}
@@ -94,14 +121,14 @@ export default function Portfolio() {
               </div>
             </div>
             <nav className="hidden md:flex items-center gap-6">
-              <a href="#about" className="text-gray-600 hover:text-blue-600 transition-colors">
-                About
-              </a>
-              <a href="#projects" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a href="#connecting-flights" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Projects
               </a>
-              <a href="#articles" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a href="#briefing-room" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Articles
+              </a>
+              <a href="#flight-log" className="text-gray-600 hover:text-blue-600 transition-colors">
+                Experience
               </a>
               <a href="#contact" className="text-gray-600 hover:text-blue-600 transition-colors">
                 Contact
@@ -121,111 +148,32 @@ export default function Portfolio() {
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             Welcome aboard
             <br />
-            <span className="text-blue-600">Flight YJN279</span>
+            <span className="text-blue-600">Flight <span className="underline">YJN279</span></span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            フルスタックWebエンジニアとして、モダンな技術スタックで
-            ユーザー体験を向上させるプロダクト開発に取り組んでいます。
+           Hello world. Welcome on board flight YJN279. The captain in command of this website is NAKAMURA Yuji and my co-pilot is <span className="line-through">GitHub</span> Cursor. We are now ready for departure. Please let me know if you need any assistance, and I hope that you enjoy the flight with me 😉
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              <Mail className="h-4 w-4 mr-2" />
-              Contact for Hiring
-            </Button>
-            <Button variant="outline" size="lg">
-              <Github className="h-4 w-4 mr-2" />
-              View GitHub
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Flight Information</h2>
-            <p className="text-gray-600">パイロット（エンジニア）プロフィール</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-8 rounded-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">YJ</span>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">YJN279</h3>
-                    <p className="text-gray-600">Full Stack Web Engineer</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-blue-600" />
-                    <span className="text-gray-700">Tokyo, Japan</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-blue-600" />
-                    <span className="text-gray-700">5年の開発経験</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">技術スタック</h4>
-                <div className="flex flex-wrap gap-2">
-                  {["React", "Next.js", "TypeScript", "Node.js", "Python", "AWS", "Docker", "PostgreSQL"].map(
-                    (tech) => (
-                      <Badge key={tech} variant="secondary" className="bg-blue-100 text-blue-800">
-                        {tech}
-                      </Badge>
-                    ),
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">SNS & Links</h4>
-                <div className="flex gap-4">
-                  <a
-                    href="https://github.com/yjn279"
-                    className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    <Github className="h-5 w-5" />
-                  </a>
-                  <a
-                    href="https://twitter.com/yjn279"
-                    className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    <Twitter className="h-5 w-5" />
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/yjn279"
-                    className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    <Linkedin className="h-5 w-5" />
-                  </a>
-                </div>
-              </div>
+          
+          {/* Scroll Down Animation */}
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-gray-600">Scroll down to explore</p>
+            <div className="animate-bounce">
+              <ChevronDown className="h-8 w-8 text-blue-600" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-16 px-4">
+      {/* Connecting Flights Section (Projects) */}
+      <section id="connecting-flights" className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Flight Routes</h2>
-            <p className="text-gray-600">開発したサービス・プロジェクト</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Connecting Flights</h2>
+            <p className="text-gray-600">ポートフォリオ・開発プロジェクト</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {projects.slice(0, 3).map((project, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
@@ -258,47 +206,118 @@ export default function Portfolio() {
               </Card>
             ))}
           </div>
+
+          <div className="text-center">
+            <Button variant="outline" size="lg" className="group">
+              すべてのプロジェクトを見る
+              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* Articles Section */}
-      <section id="articles" className="py-16 px-4 bg-white">
+      {/* Briefing Room Section (Articles) */}
+      <section id="briefing-room" className="py-16 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Flight Log</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Briefing Room</h2>
             <p className="text-gray-600">技術記事・ブログ</p>
           </div>
 
-          <div className="space-y-6 max-w-4xl mx-auto">
-            {articles.map((article, index) => (
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {articles.slice(0, 3).map((article, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col gap-4">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         <a href={article.url} className="hover:text-blue-600 transition-colors">
                           {article.title}
                         </a>
                       </h3>
-                      <p className="text-gray-600 mb-3">{article.description}</p>
-                      <div className="flex items-center gap-4">
+                      <p className="text-gray-600 mb-3 text-sm">{article.description}</p>
+                      <div className="flex items-center justify-between">
                         <div className="flex flex-wrap gap-1">
-                          {article.tags.map((tag) => (
+                          {article.tags.slice(0, 2).map((tag) => (
                             <Badge key={tag} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
                           ))}
                         </div>
-                        <span className="text-sm text-gray-500">{article.publishedAt}</span>
+                        <span className="text-xs text-gray-500">{article.publishedAt}</span>
                       </div>
                     </div>
-                    <a href={article.url} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                      <ExternalLink className="h-5 w-5" />
+                    <a href={article.url} className="self-end p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                      <ExternalLink className="h-4 w-4" />
                     </a>
                   </div>
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          <div className="text-center">
+            <Button variant="outline" size="lg" className="group">
+              すべての記事を見る
+              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Flight Log Section (Experience) - Timeline Design */}
+      <section id="flight-log" className="py-16 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Flight Log</h2>
+            <p className="text-gray-600">経歴・職歴</p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="relative">
+              {/* Timeline Line */}
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200"></div>
+              
+              <div className="space-y-8">
+                {experiences.map((exp, index) => (
+                  <div key={index} className="relative flex items-start gap-6">
+                    {/* Timeline Dot */}
+                    <div className="relative z-10 flex-shrink-0">
+                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Building className="h-8 w-8 text-white" />
+                      </div>
+                    </div>
+                    
+                    {/* Content Card */}
+                    <div className="flex-1 min-w-0">
+                      <Card className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between gap-4 mb-4">
+                            <div>
+                              <h3 className="text-xl font-bold text-gray-900 mb-1">{exp.position}</h3>
+                              <p className="text-blue-600 font-semibold text-lg">{exp.company}</p>
+                            </div>
+                            <Badge variant="outline" className="text-sm font-medium px-3 py-1">
+                              {exp.period}
+                            </Badge>
+                          </div>
+                          
+                          <p className="text-gray-600 mb-4 leading-relaxed">{exp.description}</p>
+                          
+                          <div className="flex flex-wrap gap-2">
+                            {exp.technologies.map((tech) => (
+                              <Badge key={tech} variant="secondary" className="text-xs">
+                                {tech}
+                              </Badge>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -314,11 +333,11 @@ export default function Portfolio() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
                 <Mail className="h-4 w-4 mr-2" />
-                yjn279@example.com
+                Contact YJN279
               </Button>
               <Button variant="outline" size="lg">
                 <MessageCircle className="h-4 w-4 mr-2" />
-                Schedule a Call
+                プロフィールを見る
               </Button>
             </div>
           </div>
@@ -335,7 +354,7 @@ export default function Portfolio() {
             <span className="font-semibold text-gray-900">Flight YJN279</span>
           </div>
           <p className="text-gray-600 text-sm">
-            © 2024 YJN279. All rights reserved. Safe travels in the world of code.
+            © 2025 YJN279 All rights reserved.
           </p>
         </div>
       </footer>
@@ -344,7 +363,7 @@ export default function Portfolio() {
       <div className="fixed bottom-6 right-6 z-50">
         <Button size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg">
           <Mail className="h-5 w-5 mr-2" />
-          採用担当者様
+          Contact YJN279
         </Button>
       </div>
     </div>
