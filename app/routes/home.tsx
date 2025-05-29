@@ -18,9 +18,11 @@ import {
   Linkedin,
   Mail,
   MapPin,
+  Menu,
   MessageCircle,
   Plane,
   Twitter,
+  X,
 } from "lucide-react";
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
@@ -41,6 +43,11 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Portfolio() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
   const projects = [
     {
       id: "ecommerce-platform",
@@ -143,6 +150,7 @@ export default function Portfolio() {
                 <p className="text-sm text-gray-600">Web Engineer Portfolio</p>
               </div>
             </div>
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               <a
                 href="#connecting-flights"
@@ -169,8 +177,80 @@ export default function Portfolio() {
                 Contact
               </a>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle navigation menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6 text-gray-600" />
+              ) : (
+                <Menu className="h-6 w-6 text-gray-600" />
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t bg-white/95 backdrop-blur-sm">
+            <nav className="container mx-auto px-4 py-4">
+              <div className="flex flex-col space-y-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("connecting-flights")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
+                >
+                  Projects
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("briefing-room")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
+                >
+                  Articles
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("flight-log")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
+                >
+                  Experience
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("contact")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
+                >
+                  Contact
+                </button>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -362,15 +442,18 @@ export default function Portfolio() {
           <div className="max-w-4xl mx-auto">
             <div className="relative">
               {/* Timeline Line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200" />
+              <div className="absolute left-4 md:left-8 top-0 bottom-0 w-0.5 bg-blue-200" />
 
               <div className="space-y-8">
                 {experiences.map((exp) => (
-                  <div key={exp.id} className="relative flex items-start gap-6">
+                  <div
+                    key={exp.id}
+                    className="relative flex items-start gap-4 md:gap-6"
+                  >
                     {/* Timeline Dot */}
                     <div className="relative z-10 flex-shrink-0">
-                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                        <Building className="h-8 w-8 text-white" />
+                      <div className="w-8 h-8 md:w-16 md:h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Building className="h-4 w-4 md:h-8 md:w-8 text-white" />
                       </div>
                     </div>
 
@@ -464,12 +547,14 @@ export default function Portfolio() {
       </footer>
 
       {/* Floating Contact Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50">
         <Button
-          size="lg"
-          className="rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
+          size="sm"
+          className="md:size-lg rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
         >
-          <Mail className="h-5 w-5 mr-2" />
+          <Mail className="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" />
+          <span className="hidden sm:inline">Contact YJN279</span>
+          <span className="sm:hidden">Contact</span>
           Contact YJN279
         </Button>
       </div>

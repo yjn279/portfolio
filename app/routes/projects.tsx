@@ -195,7 +195,7 @@ export default function Projects() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             Featured Projects
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {featuredProjects.map((project) => (
               <Card
                 key={project.id}
@@ -273,7 +273,7 @@ export default function Projects() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             Other Projects
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {otherProjects.map((project) => (
               <Card
                 key={project.id}

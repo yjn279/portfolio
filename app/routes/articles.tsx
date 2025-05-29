@@ -227,7 +227,7 @@ export default function Articles() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             Featured Articles
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {featuredArticles.map((article) => (
               <Card
                 key={article.id}
@@ -315,7 +315,7 @@ export default function Articles() {
                 className="hover:shadow-md transition-shadow"
               >
                 <CardContent className="p-6">
-                  <div className="flex items-start gap-6">
+                  <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <Badge
@@ -339,7 +339,7 @@ export default function Articles() {
                       <p className="text-gray-600 mb-3">
                         {article.description}
                       </p>
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-">
                         <div className="flex flex-wrap gap-1">
                           {article.tags.slice(0, 3).map((tag) => (
                             <Badge
@@ -374,7 +374,7 @@ export default function Articles() {
                     </div>
                     <a
                       href={article.url}
-                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors sm:self-start"
                     >
                       <ExternalLink className="h-5 w-5" />
                     </a>
