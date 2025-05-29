@@ -1,79 +1,155 @@
-# Welcome to React Router!
+# ✈️ Flight YJN279 - Portfolio
 
-A modern, production-ready template for building full-stack React applications using React Router.
+> Welcome on board flight YJN279. The captain in command of this website is NAKAMURA Yuji and my co-pilot is ~~GitHub~~ Cursor. We are now ready for departure.
 
-## Features
+YJN279のポートフォリオサイトです。フルスタックWebエンジニアとして、モダンな技術スタックでユーザー体験を向上させるプロダクト開発に取り組んでいます。
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## 🚀 デモ
 
-## Getting Started
+[https://portfolio.yjn279.dev](https://portfolio.yjn279.dev) *(仮想URL)*
 
-### Installation
+## 📋 機能
 
-Install the dependencies:
+- **プロジェクト紹介**: 開発プロジェクトの詳細とデモリンク
+- **技術記事**: Zenn・Qiitaで公開している技術記事の一覧  
+- **経歴**: フルスタックエンジニアとしての職歴・経験
+- **プロフィール**: スキルセット・連絡先情報
+- **レスポンシブデザイン**: モバイル・タブレット・デスクトップ対応
+
+## 🛠️ 技術スタック
+
+### フロントエンド
+- **React 19** - UIライブラリ
+- **React Router v7** - ルーティング
+- **TypeScript** - 型安全性
+- **Tailwind CSS v4** - スタイリング
+- **Radix UI** - アクセシブルなコンポーネント
+- **Lucide React** - アイコンライブラリ
+
+### バックエンド・インフラ
+- **Cloudflare Workers** - エッジコンピューティング
+- **Vite** - 高速ビルドツール
+- **Wrangler** - Cloudflareデプロイメント
+
+### 開発ツール
+- **Volta** - Node.jsバージョン管理
+- **pnpm** - パッケージマネージャー
+- **ESLint** - 静的解析
+- **TypeScript** - 型チェック
+
+## 🏃‍♂️ クイックスタート
+
+### 前提条件
+
+- Node.js 24.1.0 (Voltaで管理)
+- pnpm 10.11.0
+
+### インストール
 
 ```bash
-npm install
+# リポジトリをクローン
+git clone https://github.com/yjn279/portfolio.git
+cd portfolio
+
+# 依存関係をインストール
+pnpm install
 ```
 
-### Development
-
-Start the development server with HMR:
+### 開発サーバー起動
 
 ```bash
-npm run dev
+# 開発サーバーを起動
+pnpm dev
+
+# ブラウザで http://localhost:5173 を開く
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Previewing the Production Build
-
-Preview the production build locally:
+### ビルド・デプロイ
 
 ```bash
-npm run preview
+# プロダクションビルド
+pnpm build
+
+# プレビュー
+pnpm preview
+
+# Cloudflare Workersにデプロイ
+pnpm deploy
 ```
 
-## Building for Production
+## 📁 プロジェクト構造
 
-Create a production build:
+```
+portfolio/
+├── app/
+│   ├── components/ui/          # 再利用可能なUIコンポーネント
+│   ├── routes/                 # ページコンポーネント
+│   │   ├── home.tsx           # ホームページ
+│   │   ├── projects.tsx       # プロジェクト一覧
+│   │   ├── articles.tsx       # 記事一覧
+│   │   └── profile.tsx        # プロフィール
+│   ├── lib/                   # ユーティリティ関数
+│   ├── app.css               # グローバルスタイル
+│   └── root.tsx              # アプリケーションルート
+├── public/                    # 静的ファイル
+├── workers/                   # Cloudflare Workers設定
+├── package.json
+├── vite.config.ts            # Vite設定
+├── wrangler.jsonc            # Cloudflare Workers設定
+└── tsconfig.json             # TypeScript設定
+```
 
+## 🎨 デザインシステム
+
+### テーマ
+- **航空**をテーマにしたUI/UX
+- **Flight YJN279**のブランディング
+- シンプルで洗練されたデザイン
+
+### カラーパレット
+- **プライマリー**: Blue 600 (`#2563eb`)
+- **背景**: Sky-Blue グラデーション
+- **テキスト**: Gray 900/600
+
+### コンポーネント
+- [Radix UI](https://www.radix-ui.com/)ベースのアクセシブルコンポーネント
+- [shadcn/ui](https://ui.shadcn.com/)スタイルのデザインシステム
+
+## 📜 利用可能なスクリプト
+
+| コマンド | 説明 |
+|----------|------|
+| `pnpm dev` | 開発サーバーを起動 |
+| `pnpm build` | プロダクションビルド |
+| `pnpm preview` | ビルド結果をプレビュー |
+| `pnpm deploy` | Cloudflare Workersにデプロイ |
+| `pnpm typecheck` | TypeScript型チェック |
+| `pnpm cf-typegen` | Cloudflare Workers型定義生成 |
+
+## 🌐 デプロイメント
+
+このプロジェクトは[Cloudflare Workers](https://workers.cloudflare.com/)にデプロイされます。
+
+### 自動デプロイ
+- `main`ブランチにプッシュすると自動デプロイ
+- プレビューデプロイも利用可能
+
+### 手動デプロイ
 ```bash
-npm run build
+pnpm deploy
 ```
 
-## Deployment
+## 👨‍💻 著者
 
-Deployment is done using the Wrangler CLI.
+**NAKAMURA Yuji (@yjn279)**
+- Portfolio: [https://portfolio.yjn279.dev](https://portfolio.yjn279.dev)
+- GitHub: [@yjn279](https://github.com/yjn279)
+- Zenn: [@yjn279](https://zenn.dev/yjn279)
 
-To build and deploy directly to production:
+## 📝 ライセンス
 
-```sh
-npm run deploy
-```
-
-To deploy a preview URL:
-
-```sh
-npx wrangler versions upload
-```
-
-You can then promote a version to production after verification or roll it out progressively.
-
-```sh
-npx wrangler versions deploy
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+このプロジェクトは個人ポートフォリオサイトです。
 
 ---
 
-Built with ❤️ using React Router.
+**Thank you for boarding Flight YJN279! 🛫**
