@@ -189,7 +189,7 @@ export default function Articles() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Articles</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {featuredArticles.map((article, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 border-blue-100">
                 <CardHeader>
@@ -256,7 +256,7 @@ export default function Articles() {
             {otherArticles.map((article, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
-                  <div className="flex items-start gap-6">
+                  <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <Badge variant="secondary" className={getPlatformColor(article.platform)}>
@@ -270,7 +270,7 @@ export default function Articles() {
                         </a>
                       </h3>
                       <p className="text-gray-600 mb-3">{article.description}</p>
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="flex flex-wrap gap-1">
                           {article.tags.slice(0, 3).map((tag) => (
                             <Badge key={tag} variant="outline" className="text-xs">
@@ -299,7 +299,7 @@ export default function Articles() {
                         </div>
                       </div>
                     </div>
-                    <a href={article.url} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <a href={article.url} className="p-2 hover:bg-gray-100 rounded-lg transition-colors sm:self-start">
                       <ExternalLink className="h-5 w-5" />
                     </a>
                   </div>

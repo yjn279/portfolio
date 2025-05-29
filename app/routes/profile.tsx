@@ -171,14 +171,14 @@ export default function Profile() {
             </div>
 
             {/* Profile Card */}
-            <div className="grid md:grid-cols-2 gap-8 items-center mb-16">
-              <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-8 rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16">
+              <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-6 md:p-8 rounded-2xl">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-2xl">YJ</span>
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-lg md:text-2xl">YJ</span>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">YJN279</h3>
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900">YJN279</h3>
                     <p className="text-gray-600">Full Stack Web Engineer</p>
                   </div>
                 </div>
@@ -254,7 +254,7 @@ export default function Profile() {
         <div className="container mx-auto">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Technical Skills</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -356,14 +356,14 @@ export default function Profile() {
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Work Experience</h2>
             
             <div className="relative">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200"></div>
+              <div className="absolute left-4 md:left-8 top-0 bottom-0 w-0.5 bg-blue-200"></div>
               
               <div className="space-y-12">
                 {experiences.map((exp, index) => (
-                  <div key={index} className="relative flex items-start gap-6">
+                  <div key={index} className="relative flex items-start gap-4 md:gap-6">
                     <div className="relative z-10 flex-shrink-0">
-                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                        <Building className="h-8 w-8 text-white" />
+                      <div className="w-8 h-8 md:w-16 md:h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <Building className="h-4 w-4 md:h-8 md:w-8 text-white" />
                       </div>
                     </div>
                     
@@ -417,7 +417,7 @@ export default function Profile() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Education */}
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">Education</h2>
@@ -483,7 +483,7 @@ export default function Profile() {
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Interests & Hobbies</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {interests.map((interest, index) => (
                 <Card key={index} className="hover:shadow-md transition-shadow">
                   <CardContent className="p-6">

@@ -151,7 +151,7 @@ export default function Projects() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Projects</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {featuredProjects.map((project, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 border-blue-100">
                 <CardHeader>
@@ -210,7 +210,7 @@ export default function Projects() {
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Other Projects</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {otherProjects.map((project, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
