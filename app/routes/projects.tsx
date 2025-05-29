@@ -1,32 +1,52 @@
-import type { Route } from "./+types/projects";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Plane,
-  Github,
-  ExternalLink,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   ArrowLeft,
   Calendar,
+  ExternalLink,
+  Github,
+  Plane,
   Star,
   Users,
-} from "lucide-react"
-import { Link } from "react-router"
+} from "lucide-react";
+import { Link } from "react-router";
+import type { Route } from "./+types/projects";
 
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
     { title: "Projects - Flight YJN279" },
-    { name: "description", content: "YJN279の開発プロジェクト一覧。フルスタックWebエンジニアとして手がけたプロダクトやアプリケーションをご紹介します。" },
+    {
+      name: "description",
+      content:
+        "YJN279の開発プロジェクト一覧。フルスタックWebエンジニアとして手がけたプロダクトやアプリケーションをご紹介します。",
+    },
   ];
 }
 
 export default function Projects() {
   const projects = [
     {
+      id: "ecommerce-platform",
       title: "E-Commerce Platform",
-      description: "Next.js製のフルスタックECサイト。Stripe決済、在庫管理、管理者ダッシュボードを実装。",
-      longDescription: "モダンなECサイトプラットフォームで、ユーザー認証、商品管理、決済処理、注文管理などの機能を包括的に実装。レスポンシブデザインとSEO最適化も考慮。",
-      tags: ["Next.js", "TypeScript", "Prisma", "Stripe", "PostgreSQL", "Tailwind CSS"],
+      description:
+        "Next.js製のフルスタックECサイト。Stripe決済、在庫管理、管理者ダッシュボードを実装。",
+      longDescription:
+        "モダンなECサイトプラットフォームで、ユーザー認証、商品管理、決済処理、注文管理などの機能を包括的に実装。レスポンシブデザインとSEO最適化も考慮。",
+      tags: [
+        "Next.js",
+        "TypeScript",
+        "Prisma",
+        "Stripe",
+        "PostgreSQL",
+        "Tailwind CSS",
+      ],
       github: "https://github.com/yjn279/ecommerce",
       demo: "https://ecommerce-demo.vercel.app",
       slides: "https://slides.com/yjn279/ecommerce",
@@ -36,9 +56,12 @@ export default function Projects() {
       featured: true,
     },
     {
+      id: "task-management-app",
       title: "Task Management App",
-      description: "リアルタイム同期機能付きタスク管理アプリ。チーム協働とプロジェクト管理に最適。",
-      longDescription: "Firebaseを活用したリアルタイムタスク管理アプリケーション。ドラッグ&ドロップ、リアルタイム更新、チーム招待機能を実装。",
+      description:
+        "リアルタイム同期機能付きタスク管理アプリ。チーム協働とプロジェクト管理に最適。",
+      longDescription:
+        "Firebaseを活用したリアルタイムタスク管理アプリケーション。ドラッグ&ドロップ、リアルタイム更新、チーム招待機能を実装。",
       tags: ["React", "Firebase", "Material-UI", "Redux", "WebSocket"],
       github: "https://github.com/yjn279/task-manager",
       demo: "https://task-manager-demo.vercel.app",
@@ -49,9 +72,12 @@ export default function Projects() {
       featured: true,
     },
     {
+      id: "weather-dashboard",
       title: "Weather Dashboard",
-      description: "気象データ可視化ダッシュボード。インタラクティブなチャートとマップ表示。",
-      longDescription: "OpenWeatherMap APIを使用した気象データ可視化ダッシュボード。D3.jsによるインタラクティブなグラフとマップ表示機能。",
+      description:
+        "気象データ可視化ダッシュボード。インタラクティブなチャートとマップ表示。",
+      longDescription:
+        "OpenWeatherMap APIを使用した気象データ可視化ダッシュボード。D3.jsによるインタラクティブなグラフとマップ表示機能。",
       tags: ["Vue.js", "D3.js", "Express.js", "Chart.js", "OpenWeatherMap API"],
       github: "https://github.com/yjn279/weather-dashboard",
       demo: "https://weather-dashboard-demo.vercel.app",
@@ -62,9 +88,12 @@ export default function Projects() {
       featured: false,
     },
     {
+      id: "blog-cms-platform",
       title: "Blog CMS Platform",
-      description: "ヘッドレスCMSを活用したブログプラットフォーム。マークダウンエディタ搭載。",
-      longDescription: "Contentful CMSとNext.jsを組み合わせたブログプラットフォーム。マークダウンエディタ、タグ管理、SEO最適化機能を実装。",
+      description:
+        "ヘッドレスCMSを活用したブログプラットフォーム。マークダウンエディタ搭載。",
+      longDescription:
+        "Contentful CMSとNext.jsを組み合わせたブログプラットフォーム。マークダウンエディタ、タグ管理、SEO最適化機能を実装。",
       tags: ["Next.js", "Contentful", "GraphQL", "Markdown", "Vercel"],
       github: "https://github.com/yjn279/blog-cms",
       demo: "https://blog-cms-demo.vercel.app",
@@ -75,9 +104,11 @@ export default function Projects() {
       featured: false,
     },
     {
+      id: "chat-application",
       title: "Real-time Chat Application",
       description: "Socket.ioを使用したリアルタイムチャットアプリケーション。",
-      longDescription: "Node.js、Socket.io、Reactを使用したリアルタイムチャットアプリ。プライベートメッセージ、グループチャット、ファイル共有機能を実装。",
+      longDescription:
+        "Node.js、Socket.io、Reactを使用したリアルタイムチャットアプリ。プライベートメッセージ、グループチャット、ファイル共有機能を実装。",
       tags: ["React", "Node.js", "Socket.io", "MongoDB", "Express"],
       github: "https://github.com/yjn279/chat-app",
       demo: "https://chat-app-demo.herokuapp.com",
@@ -88,10 +119,19 @@ export default function Projects() {
       featured: false,
     },
     {
+      id: "portfolio-website",
       title: "Portfolio Website",
-      description: "React Router v7とCloudflareを使用したポートフォリオサイト。",
-      longDescription: "このサイト自体！React Router v7、shadcn/ui、Tailwind CSS v4を使用。航空機テーマのデザインとアニメーションを実装。",
-      tags: ["React Router v7", "TypeScript", "Tailwind CSS", "Cloudflare", "shadcn/ui"],
+      description:
+        "React Router v7とCloudflareを使用したポートフォリオサイト。",
+      longDescription:
+        "このサイト自体！React Router v7、shadcn/ui、Tailwind CSS v4を使用。航空機テーマのデザインとアニメーションを実装。",
+      tags: [
+        "React Router v7",
+        "TypeScript",
+        "Tailwind CSS",
+        "Cloudflare",
+        "shadcn/ui",
+      ],
       github: "https://github.com/yjn279/portfolio",
       demo: "https://yjn279.pages.dev",
       slides: null,
@@ -100,10 +140,10 @@ export default function Projects() {
       team: "個人開発",
       featured: true,
     },
-  ]
+  ];
 
-  const featuredProjects = projects.filter(project => project.featured)
-  const otherProjects = projects.filter(project => !project.featured)
+  const featuredProjects = projects.filter((project) => project.featured);
+  const otherProjects = projects.filter((project) => !project.featured);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
@@ -116,7 +156,9 @@ export default function Projects() {
                 <Plane className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Flight YJN279</h1>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Flight YJN279
+                </h1>
                 <p className="text-sm text-gray-600">Web Engineer Portfolio</p>
               </div>
             </Link>
@@ -150,34 +192,53 @@ export default function Projects() {
       {/* Featured Projects */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Projects</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Featured Projects
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {featuredProjects.map((project, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 border-blue-100">
+            {featuredProjects.map((project) => (
+              <Card
+                key={project.id}
+                className="hover:shadow-xl transition-all duration-300 border-2 border-blue-100"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <Star className="h-5 w-5 text-yellow-500 fill-current" />
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      <Badge
+                        variant="secondary"
+                        className="bg-blue-100 text-blue-800"
+                      >
                         {project.status}
                       </Badge>
                     </div>
                     <div className="flex gap-2">
-                      <a href={project.github} className="p-1 hover:bg-gray-100 rounded">
+                      <a
+                        href={project.github}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
                         <Github className="h-4 w-4" />
                       </a>
-                      <a href={project.demo} className="p-1 hover:bg-gray-100 rounded">
+                      <a
+                        href={project.demo}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
                         <ExternalLink className="h-4 w-4" />
                       </a>
                       {project.slides && (
-                        <a href={project.slides} className="p-1 hover:bg-gray-100 rounded">
+                        <a
+                          href={project.slides}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
                           <Plane className="h-4 w-4" />
                         </a>
                       )}
                     </div>
                   </div>
                   <CardTitle className="text-xl">{project.title}</CardTitle>
-                  <CardDescription className="text-base">{project.longDescription}</CardDescription>
+                  <CardDescription className="text-base">
+                    {project.longDescription}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -209,24 +270,38 @@ export default function Projects() {
       {/* Other Projects */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Other Projects</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Other Projects
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {otherProjects.map((project, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+            {otherProjects.map((project) => (
+              <Card
+                key={project.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <Badge variant="outline" className="text-xs">
                       {project.status}
                     </Badge>
                     <div className="flex gap-2">
-                      <a href={project.github} className="p-1 hover:bg-gray-100 rounded">
+                      <a
+                        href={project.github}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
                         <Github className="h-4 w-4" />
                       </a>
-                      <a href={project.demo} className="p-1 hover:bg-gray-100 rounded">
+                      <a
+                        href={project.demo}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
                         <ExternalLink className="h-4 w-4" />
                       </a>
                       {project.slides && (
-                        <a href={project.slides} className="p-1 hover:bg-gray-100 rounded">
+                        <a
+                          href={project.slides}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
                           <Plane className="h-4 w-4" />
                         </a>
                       )}
@@ -271,7 +346,9 @@ export default function Projects() {
       <section className="py-16 px-4">
         <div className="container mx-auto text-center">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready for Your Next Project?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Ready for Your Next Project?
+            </h2>
             <p className="text-gray-600 mb-8">
               新しいプロジェクトのご相談やコラボレーションをお待ちしています。
               お気軽にお声がけください。
@@ -306,5 +383,5 @@ export default function Projects() {
         </div>
       </footer>
     </div>
-  )
-} 
+  );
+}
