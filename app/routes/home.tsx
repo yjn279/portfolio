@@ -17,6 +17,7 @@ import {
   ArrowRight,
   Building,
 } from "lucide-react"
+import { Link } from "react-router"
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -208,10 +209,12 @@ export default function Portfolio() {
           </div>
 
           <div className="text-center">
-            <Button variant="outline" size="lg" className="group">
-              すべてのプロジェクトを見る
-              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link to="/projects">
+              <Button variant="outline" size="lg" className="group">
+                すべてのプロジェクトを見る
+                <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -257,10 +260,12 @@ export default function Portfolio() {
           </div>
 
           <div className="text-center">
-            <Button variant="outline" size="lg" className="group">
-              すべての記事を見る
-              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link to="/articles">
+              <Button variant="outline" size="lg" className="group">
+                すべての記事を見る
+                <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -335,10 +340,12 @@ export default function Portfolio() {
                 <Mail className="h-4 w-4 mr-2" />
                 Contact YJN279
               </Button>
-              <Button variant="outline" size="lg">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                プロフィールを見る
-              </Button>
+              <Link to="/profile">
+                <Button variant="outline" size="lg">
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  プロフィールを見る
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
