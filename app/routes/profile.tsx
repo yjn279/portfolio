@@ -27,6 +27,9 @@ import {
   Twitter,
 } from "lucide-react";
 import { Link } from "react-router";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { certifications, education, experiences, interests, skills } from "@/data/profile";
 import type { Route } from "./+types/profile";
 
 export function meta(_: Route.MetaArgs) {
@@ -41,200 +44,10 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Profile() {
-  const experiences = [
-    {
-      id: "tech-startup-inc-senior",
-      company: "Tech Startup Inc.",
-      position: "Senior Full Stack Engineer",
-      period: "2022年4月 - 現在",
-      location: "東京, 日本",
-      description:
-        "React/Next.jsとNode.jsを使用したWebアプリケーション開発をリード。チーム規模5名のテックリードとして、アーキテクチャ設計からデプロイまでの全工程を担当。",
-      achievements: [
-        "新規プロダクトの0→1開発を主導し、月間10万PVを達成",
-        "レガシーシステムのモダン化により、ページ読み込み速度を70%改善",
-        "CI/CDパイプラインの構築により、デプロイ時間を80%短縮",
-        "コードレビュー文化の導入により、バグ発生率を50%削減",
-      ],
-      technologies: [
-        "React",
-        "Next.js",
-        "TypeScript",
-        "Node.js",
-        "AWS",
-        "Docker",
-        "PostgreSQL",
-      ],
-    },
-    {
-      id: "digital-agency-co-frontend",
-      company: "Digital Agency Co.",
-      position: "Frontend Engineer",
-      period: "2020年6月 - 2022年3月",
-      location: "東京, 日本",
-      description:
-        "企業向けWebサイトとECサイトの開発・保守を担当。Vue.js/Nuxt.jsを中心とした開発チームで、UI/UX改善とパフォーマンス最適化に注力。",
-      achievements: [
-        "大手企業のコーポレートサイトリニューアルを担当（月間50万PV）",
-        "ECサイトのコンバージョン率を25%向上させるUI改善を実施",
-        "Webアクセシビリティ対応により、WCAG 2.1 AA準拠を達成",
-        "社内勉強会の企画・運営により、チーム全体のスキル向上に貢献",
-      ],
-      technologies: [
-        "Vue.js",
-        "Nuxt.js",
-        "JavaScript",
-        "SCSS",
-        "Figma",
-        "Adobe XD",
-      ],
-    },
-    {
-      id: "web-solutions-ltd-junior",
-      company: "Web Solutions Ltd.",
-      position: "Junior Developer",
-      period: "2019年4月 - 2020年5月",
-      location: "東京, 日本",
-      description:
-        "HTML/CSS/JavaScriptを使用したWebサイト制作からキャリアをスタート。基礎的なWeb技術を習得し、レスポンシブデザインとクロスブラウザ対応を学習。",
-      achievements: [
-        "中小企業向けWebサイトを月平均5件制作",
-        "WordPressテーマ開発により、制作効率を40%向上",
-        "Google PageSpeed Insightsスコア90以上を全案件で達成",
-        "社内ツール開発により、作業時間を30%短縮",
-      ],
-      technologies: ["HTML", "CSS", "JavaScript", "jQuery", "WordPress", "PHP"],
-    },
-  ];
-
-  const education = [
-    {
-      id: "tokyo-tech-computer-science",
-      school: "東京工業大学",
-      degree: "情報工学科 学士",
-      period: "2015年4月 - 2019年3月",
-      description:
-        "コンピュータサイエンスの基礎から応用まで幅広く学習。特にアルゴリズムとデータ構造、ソフトウェア工学に注力。",
-      achievements: [
-        "卒業研究：機械学習を用いたWebアプリケーションのパフォーマンス最適化",
-        "プログラミングコンテスト：ACM-ICPC アジア地区予選出場",
-        "GPA: 3.8/4.0",
-        "学部長賞受賞",
-      ],
-    },
-  ];
-
-  const skills = {
-    frontend: [
-      "React",
-      "Next.js",
-      "Vue.js",
-      "Nuxt.js",
-      "TypeScript",
-      "JavaScript",
-      "HTML5",
-      "CSS3",
-      "Tailwind CSS",
-      "SCSS",
-    ],
-    backend: [
-      "Node.js",
-      "Express.js",
-      "Python",
-      "Django",
-      "FastAPI",
-      "PHP",
-      "Laravel",
-    ],
-    database: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Prisma", "TypeORM"],
-    cloud: [
-      "AWS",
-      "Vercel",
-      "Cloudflare",
-      "Docker",
-      "Kubernetes",
-      "GitHub Actions",
-    ],
-    tools: ["Git", "GitHub", "Figma", "Adobe XD", "Postman", "VS Code"],
-  };
-
-  const certifications = [
-    {
-      id: "aws-solutions-architect",
-      name: "AWS Certified Solutions Architect - Associate",
-      issuer: "Amazon Web Services",
-      date: "2023年8月",
-      credentialId: "AWS-SAA-123456",
-    },
-    {
-      id: "gcp-cloud-architect",
-      name: "Google Cloud Professional Cloud Architect",
-      issuer: "Google Cloud",
-      date: "2023年3月",
-      credentialId: "GCP-PCA-789012",
-    },
-    {
-      id: "react-developer-meta",
-      name: "React Developer Certification",
-      issuer: "Meta",
-      date: "2022年11月",
-      credentialId: "META-REACT-345678",
-    },
-  ];
-
-  const interests = [
-    {
-      id: "open-source-contribution",
-      icon: Code,
-      name: "オープンソース貢献",
-      description: "React、Vue.jsエコシステムへの貢献",
-    },
-    {
-      id: "music-piano",
-      icon: Music,
-      name: "音楽",
-      description: "ピアノ演奏、ジャズ・クラシック鑑賞",
-    },
-    {
-      id: "photography",
-      icon: Camera,
-      name: "写真",
-      description: "風景写真、ストリートフォトグラフィー",
-    },
-    {
-      id: "specialty-coffee",
-      icon: Coffee,
-      name: "コーヒー",
-      description: "スペシャルティコーヒー、ハンドドリップ",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="p-2 bg-blue-600 rounded-lg">
-                <Plane className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  Flight YJN279
-                </h1>
-                <p className="text-sm text-gray-600">Web Engineer Portfolio</p>
-              </div>
-            </Link>
-            <Link to="/">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header showBackButton={true} />
 
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
@@ -702,20 +515,7 @@ export default function Profile() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-white py-8 px-4">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-2 bg-blue-600 rounded-lg">
-              <Plane className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-semibold text-gray-900">Flight YJN279</span>
-          </div>
-          <p className="text-gray-600 text-sm">
-            © 2025 YJN279 All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
