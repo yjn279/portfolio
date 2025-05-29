@@ -19,10 +19,10 @@ import {
   Mail,
   MapPin,
   Menu,
-  X,
   MessageCircle,
   Plane,
   Twitter,
+  X,
 } from "lucide-react";
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
@@ -43,11 +43,11 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Portfolio() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
   const projects = [
     {
       id: "ecommerce-platform",
@@ -179,7 +179,8 @@ export default function Portfolio() {
             </nav>
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
+              type="button"
               className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
               onClick={toggleMobileMenu}
               aria-label="Toggle navigation menu"
@@ -198,34 +199,54 @@ export default function Portfolio() {
           <div className="md:hidden border-t bg-white/95 backdrop-blur-sm">
             <nav className="container mx-auto px-4 py-4">
               <div className="flex flex-col space-y-4">
-                <a 
-                  href="#connecting-flights" 
-                  className="text-gray-600 hover:text-blue-600 transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("connecting-flights")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
                 >
                   Projects
-                </a>
-                <a 
-                  href="#briefing-room" 
-                  className="text-gray-600 hover:text-blue-600 transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("briefing-room")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
                 >
                   Articles
-                </a>
-                <a 
-                  href="#flight-log" 
-                  className="text-gray-600 hover:text-blue-600 transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("flight-log")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
                 >
                   Experience
-                </a>
-                <a 
-                  href="#contact" 
-                  className="text-gray-600 hover:text-blue-600 transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document
+                      .getElementById("contact")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
                 >
                   Contact
-                </a>
+                </button>
               </div>
             </nav>
           </div>
@@ -425,7 +446,10 @@ export default function Portfolio() {
 
               <div className="space-y-8">
                 {experiences.map((exp) => (
-                  <div key={exp.id} className="relative flex items-start gap-4 md:gap-6">
+                  <div
+                    key={exp.id}
+                    className="relative flex items-start gap-4 md:gap-6"
+                  >
                     {/* Timeline Dot */}
                     <div className="relative z-10 flex-shrink-0">
                       <div className="w-8 h-8 md:w-16 md:h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">

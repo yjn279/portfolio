@@ -259,10 +259,14 @@ export default function Profile() {
               <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-6 md:p-8 rounded-2xl">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-lg md:text-2xl">YJ</span>
+                    <span className="text-white font-bold text-lg md:text-2xl">
+                      YJ
+                    </span>
                   </div>
                   <div>
-                    <h3 className="text-xl md:text-2xl font-bold text-gray-900">YJN279</h3>
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                      YJN279
+                    </h3>
                     <p className="text-gray-600">Full Stack Web Engineer</p>
                   </div>
                 </div>
@@ -474,7 +478,10 @@ export default function Profile() {
 
               <div className="space-y-12">
                 {experiences.map((exp) => (
-                  <div key={exp.id} className="relative flex items-start gap-4 md:gap-6">
+                  <div
+                    key={exp.id}
+                    className="relative flex items-start gap-4 md:gap-6"
+                  >
                     <div className="relative z-10 flex-shrink-0">
                       <div className="w-8 h-8 md:w-16 md:h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
                         <Building className="h-4 w-4 md:h-8 md:w-8 text-white" />
