@@ -1,131 +1,213 @@
-import type { Route } from "./+types/profile";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Plane,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ArrowLeft,
+  Award,
+  Building,
+  Calendar,
+  Camera,
+  Code,
+  Coffee,
   Github,
-  Twitter,
+  Globe,
+  GraduationCap,
+  Heart,
   Linkedin,
   Mail,
-  ArrowLeft,
   MapPin,
-  Calendar,
-  Building,
-  GraduationCap,
-  Award,
-  Code,
-  Globe,
-  Heart,
-  Coffee,
   Music,
-  Camera,
-} from "lucide-react"
-import { Link } from "react-router"
+  Plane,
+  Twitter,
+} from "lucide-react";
+import { Link } from "react-router";
+import type { Route } from "./+types/profile";
 
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
     { title: "Profile - Flight YJN279" },
-    { name: "description", content: "YJN279のプロフィールと経歴詳細。フルスタックWebエンジニアとしての経験、スキル、学歴、趣味などを詳しくご紹介します。" },
+    {
+      name: "description",
+      content:
+        "YJN279のプロフィールと経歴詳細。フルスタックWebエンジニアとしての経験、スキル、学歴、趣味などを詳しくご紹介します。",
+    },
   ];
 }
 
 export default function Profile() {
   const experiences = [
     {
+      id: "tech-startup-inc-senior",
       company: "Tech Startup Inc.",
       position: "Senior Full Stack Engineer",
       period: "2022年4月 - 現在",
       location: "東京, 日本",
-      description: "React/Next.jsとNode.jsを使用したWebアプリケーション開発をリード。チーム規模5名のテックリードとして、アーキテクチャ設計からデプロイまでの全工程を担当。",
+      description:
+        "React/Next.jsとNode.jsを使用したWebアプリケーション開発をリード。チーム規模5名のテックリードとして、アーキテクチャ設計からデプロイまでの全工程を担当。",
       achievements: [
         "新規プロダクトの0→1開発を主導し、月間10万PVを達成",
         "レガシーシステムのモダン化により、ページ読み込み速度を70%改善",
         "CI/CDパイプラインの構築により、デプロイ時間を80%短縮",
-        "コードレビュー文化の導入により、バグ発生率を50%削減"
+        "コードレビュー文化の導入により、バグ発生率を50%削減",
       ],
-      technologies: ["React", "Next.js", "TypeScript", "Node.js", "AWS", "Docker", "PostgreSQL"],
+      technologies: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Node.js",
+        "AWS",
+        "Docker",
+        "PostgreSQL",
+      ],
     },
     {
+      id: "digital-agency-co-frontend",
       company: "Digital Agency Co.",
       position: "Frontend Engineer",
       period: "2020年6月 - 2022年3月",
       location: "東京, 日本",
-      description: "企業向けWebサイトとECサイトの開発・保守を担当。Vue.js/Nuxt.jsを中心とした開発チームで、UI/UX改善とパフォーマンス最適化に注力。",
+      description:
+        "企業向けWebサイトとECサイトの開発・保守を担当。Vue.js/Nuxt.jsを中心とした開発チームで、UI/UX改善とパフォーマンス最適化に注力。",
       achievements: [
         "大手企業のコーポレートサイトリニューアルを担当（月間50万PV）",
         "ECサイトのコンバージョン率を25%向上させるUI改善を実施",
         "Webアクセシビリティ対応により、WCAG 2.1 AA準拠を達成",
-        "社内勉強会の企画・運営により、チーム全体のスキル向上に貢献"
+        "社内勉強会の企画・運営により、チーム全体のスキル向上に貢献",
       ],
-      technologies: ["Vue.js", "Nuxt.js", "JavaScript", "SCSS", "Figma", "Adobe XD"],
+      technologies: [
+        "Vue.js",
+        "Nuxt.js",
+        "JavaScript",
+        "SCSS",
+        "Figma",
+        "Adobe XD",
+      ],
     },
     {
+      id: "web-solutions-ltd-junior",
       company: "Web Solutions Ltd.",
       position: "Junior Developer",
       period: "2019年4月 - 2020年5月",
       location: "東京, 日本",
-      description: "HTML/CSS/JavaScriptを使用したWebサイト制作からキャリアをスタート。基礎的なWeb技術を習得し、レスポンシブデザインとクロスブラウザ対応を学習。",
+      description:
+        "HTML/CSS/JavaScriptを使用したWebサイト制作からキャリアをスタート。基礎的なWeb技術を習得し、レスポンシブデザインとクロスブラウザ対応を学習。",
       achievements: [
         "中小企業向けWebサイトを月平均5件制作",
         "WordPressテーマ開発により、制作効率を40%向上",
         "Google PageSpeed Insightsスコア90以上を全案件で達成",
-        "社内ツール開発により、作業時間を30%短縮"
+        "社内ツール開発により、作業時間を30%短縮",
       ],
       technologies: ["HTML", "CSS", "JavaScript", "jQuery", "WordPress", "PHP"],
     },
-  ]
+  ];
 
   const education = [
     {
+      id: "tokyo-tech-computer-science",
       school: "東京工業大学",
       degree: "情報工学科 学士",
       period: "2015年4月 - 2019年3月",
-      description: "コンピュータサイエンスの基礎から応用まで幅広く学習。特にアルゴリズムとデータ構造、ソフトウェア工学に注力。",
+      description:
+        "コンピュータサイエンスの基礎から応用まで幅広く学習。特にアルゴリズムとデータ構造、ソフトウェア工学に注力。",
       achievements: [
         "卒業研究：機械学習を用いたWebアプリケーションのパフォーマンス最適化",
         "プログラミングコンテスト：ACM-ICPC アジア地区予選出場",
         "GPA: 3.8/4.0",
-        "学部長賞受賞"
-      ]
-    }
-  ]
+        "学部長賞受賞",
+      ],
+    },
+  ];
 
   const skills = {
-    frontend: ["React", "Next.js", "Vue.js", "Nuxt.js", "TypeScript", "JavaScript", "HTML5", "CSS3", "Tailwind CSS", "SCSS"],
-    backend: ["Node.js", "Express.js", "Python", "Django", "FastAPI", "PHP", "Laravel"],
+    frontend: [
+      "React",
+      "Next.js",
+      "Vue.js",
+      "Nuxt.js",
+      "TypeScript",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "SCSS",
+    ],
+    backend: [
+      "Node.js",
+      "Express.js",
+      "Python",
+      "Django",
+      "FastAPI",
+      "PHP",
+      "Laravel",
+    ],
     database: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Prisma", "TypeORM"],
-    cloud: ["AWS", "Vercel", "Cloudflare", "Docker", "Kubernetes", "GitHub Actions"],
-    tools: ["Git", "GitHub", "Figma", "Adobe XD", "Postman", "VS Code"]
-  }
+    cloud: [
+      "AWS",
+      "Vercel",
+      "Cloudflare",
+      "Docker",
+      "Kubernetes",
+      "GitHub Actions",
+    ],
+    tools: ["Git", "GitHub", "Figma", "Adobe XD", "Postman", "VS Code"],
+  };
 
   const certifications = [
     {
+      id: "aws-solutions-architect",
       name: "AWS Certified Solutions Architect - Associate",
       issuer: "Amazon Web Services",
       date: "2023年8月",
-      credentialId: "AWS-SAA-123456"
+      credentialId: "AWS-SAA-123456",
     },
     {
+      id: "gcp-cloud-architect",
       name: "Google Cloud Professional Cloud Architect",
       issuer: "Google Cloud",
       date: "2023年3月",
-      credentialId: "GCP-PCA-789012"
+      credentialId: "GCP-PCA-789012",
     },
     {
+      id: "react-developer-meta",
       name: "React Developer Certification",
       issuer: "Meta",
       date: "2022年11月",
-      credentialId: "META-REACT-345678"
-    }
-  ]
+      credentialId: "META-REACT-345678",
+    },
+  ];
 
   const interests = [
-    { icon: Code, name: "オープンソース貢献", description: "React、Vue.jsエコシステムへの貢献" },
-    { icon: Music, name: "音楽", description: "ピアノ演奏、ジャズ・クラシック鑑賞" },
-    { icon: Camera, name: "写真", description: "風景写真、ストリートフォトグラフィー" },
-    { icon: Coffee, name: "コーヒー", description: "スペシャルティコーヒー、ハンドドリップ" },
-  ]
+    {
+      id: "open-source-contribution",
+      icon: Code,
+      name: "オープンソース貢献",
+      description: "React、Vue.jsエコシステムへの貢献",
+    },
+    {
+      id: "music-piano",
+      icon: Music,
+      name: "音楽",
+      description: "ピアノ演奏、ジャズ・クラシック鑑賞",
+    },
+    {
+      id: "photography",
+      icon: Camera,
+      name: "写真",
+      description: "風景写真、ストリートフォトグラフィー",
+    },
+    {
+      id: "specialty-coffee",
+      icon: Coffee,
+      name: "コーヒー",
+      description: "スペシャルティコーヒー、ハンドドリップ",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
@@ -138,7 +220,9 @@ export default function Profile() {
                 <Plane className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Flight YJN279</h1>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Flight YJN279
+                </h1>
                 <p className="text-sm text-gray-600">Web Engineer Portfolio</p>
               </div>
             </Link>
@@ -194,12 +278,16 @@ export default function Profile() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Globe className="h-5 w-5 text-blue-600" />
-                    <span className="text-gray-700">日本語 (ネイティブ), 英語 (ビジネスレベル)</span>
+                    <span className="text-gray-700">
+                      日本語 (ネイティブ), 英語 (ビジネスレベル)
+                    </span>
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">SNS & Links</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    SNS & Links
+                  </h4>
                   <div className="flex gap-4">
                     <a
                       href="https://github.com/yjn279"
@@ -231,7 +319,9 @@ export default function Profile() {
 
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">About Me</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                    About Me
+                  </h4>
                   <p className="text-gray-600 leading-relaxed">
                     東京工業大学情報工学科を卒業後、Web開発の世界に飛び込みました。
                     ユーザー中心の設計思想を大切にし、技術的な課題解決だけでなく、
@@ -253,7 +343,9 @@ export default function Profile() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Technical Skills</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              Technical Skills
+            </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card>
                 <CardHeader>
@@ -265,7 +357,11 @@ export default function Profile() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {skills.frontend.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-blue-100 text-blue-800">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="bg-blue-100 text-blue-800"
+                      >
                         {skill}
                       </Badge>
                     ))}
@@ -283,7 +379,11 @@ export default function Profile() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {skills.backend.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-green-100 text-green-800">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="bg-green-100 text-green-800"
+                      >
                         {skill}
                       </Badge>
                     ))}
@@ -301,7 +401,11 @@ export default function Profile() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {skills.database.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-purple-100 text-purple-800">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="bg-purple-100 text-purple-800"
+                      >
                         {skill}
                       </Badge>
                     ))}
@@ -319,7 +423,11 @@ export default function Profile() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {skills.cloud.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-orange-100 text-orange-800">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="bg-orange-100 text-orange-800"
+                      >
                         {skill}
                       </Badge>
                     ))}
@@ -337,7 +445,11 @@ export default function Profile() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {skills.tools.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="bg-red-100 text-red-800">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="bg-red-100 text-red-800"
+                      >
                         {skill}
                       </Badge>
                     ))}
@@ -353,51 +465,73 @@ export default function Profile() {
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Work Experience</h2>
-            
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              Work Experience
+            </h2>
+
             <div className="relative">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200"></div>
-              
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200" />
+
               <div className="space-y-12">
-                {experiences.map((exp, index) => (
-                  <div key={index} className="relative flex items-start gap-6">
+                {experiences.map((exp) => (
+                  <div key={exp.id} className="relative flex items-start gap-6">
                     <div className="relative z-10 flex-shrink-0">
                       <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
                         <Building className="h-8 w-8 text-white" />
                       </div>
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <Card className="hover:shadow-md transition-shadow">
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between gap-4 mb-4">
                             <div>
-                              <h3 className="text-xl font-bold text-gray-900 mb-1">{exp.position}</h3>
-                              <p className="text-blue-600 font-semibold text-lg">{exp.company}</p>
-                              <p className="text-gray-500 text-sm">{exp.location}</p>
+                              <h3 className="text-xl font-bold text-gray-900 mb-1">
+                                {exp.position}
+                              </h3>
+                              <p className="text-blue-600 font-semibold text-lg">
+                                {exp.company}
+                              </p>
+                              <p className="text-gray-500 text-sm">
+                                {exp.location}
+                              </p>
                             </div>
-                            <Badge variant="outline" className="text-sm font-medium px-3 py-1">
+                            <Badge
+                              variant="outline"
+                              className="text-sm font-medium px-3 py-1"
+                            >
                               {exp.period}
                             </Badge>
                           </div>
-                          
-                          <p className="text-gray-600 mb-4 leading-relaxed">{exp.description}</p>
-                          
+
+                          <p className="text-gray-600 mb-4 leading-relaxed">
+                            {exp.description}
+                          </p>
+
                           <div className="mb-4">
-                            <h4 className="font-semibold text-gray-900 mb-2">主な成果・実績</h4>
+                            <h4 className="font-semibold text-gray-900 mb-2">
+                              主な成果・実績
+                            </h4>
                             <ul className="space-y-1">
                               {exp.achievements.map((achievement, i) => (
-                                <li key={i} className="text-gray-600 text-sm flex items-start gap-2">
+                                <li
+                                  key={`${exp.id}-achievement-${i}`}
+                                  className="text-gray-600 text-sm flex items-start gap-2"
+                                >
                                   <span className="text-blue-600 mt-1">•</span>
                                   {achievement}
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          
+
                           <div className="flex flex-wrap gap-2">
                             {exp.technologies.map((tech) => (
-                              <Badge key={tech} variant="outline" className="text-xs">
+                              <Badge
+                                key={tech}
+                                variant="outline"
+                                className="text-xs"
+                              >
                                 {tech}
                               </Badge>
                             ))}
@@ -420,22 +554,35 @@ export default function Profile() {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Education */}
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Education</h2>
-                {education.map((edu, index) => (
-                  <Card key={index} className="mb-6">
+                <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                  Education
+                </h2>
+                {education.map((edu) => (
+                  <Card key={edu.id} className="mb-6">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <div className="p-3 bg-blue-100 rounded-lg">
                           <GraduationCap className="h-6 w-6 text-blue-600" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-900">{edu.degree}</h3>
-                          <p className="text-blue-600 font-semibold">{edu.school}</p>
-                          <p className="text-gray-500 text-sm mb-3">{edu.period}</p>
-                          <p className="text-gray-600 mb-3">{edu.description}</p>
+                          <h3 className="text-lg font-bold text-gray-900">
+                            {edu.degree}
+                          </h3>
+                          <p className="text-blue-600 font-semibold">
+                            {edu.school}
+                          </p>
+                          <p className="text-gray-500 text-sm mb-3">
+                            {edu.period}
+                          </p>
+                          <p className="text-gray-600 mb-3">
+                            {edu.description}
+                          </p>
                           <ul className="space-y-1">
                             {edu.achievements.map((achievement, i) => (
-                              <li key={i} className="text-gray-600 text-sm flex items-start gap-2">
+                              <li
+                                key={`${edu.id}-achievement-${i}`}
+                                className="text-gray-600 text-sm flex items-start gap-2"
+                              >
                                 <span className="text-blue-600 mt-1">•</span>
                                 {achievement}
                               </li>
@@ -450,21 +597,31 @@ export default function Profile() {
 
               {/* Certifications */}
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Certifications</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                  Certifications
+                </h2>
                 <div className="space-y-4">
-                  {certifications.map((cert, index) => (
-                    <Card key={index}>
+                  {certifications.map((cert) => (
+                    <Card key={cert.id}>
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           <div className="p-3 bg-green-100 rounded-lg">
                             <Award className="h-6 w-6 text-green-600" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-gray-900">{cert.name}</h3>
-                            <p className="text-green-600 font-semibold">{cert.issuer}</p>
+                            <h3 className="text-lg font-bold text-gray-900">
+                              {cert.name}
+                            </h3>
+                            <p className="text-green-600 font-semibold">
+                              {cert.issuer}
+                            </p>
                             <div className="flex items-center justify-between mt-2">
-                              <p className="text-gray-500 text-sm">{cert.date}</p>
-                              <p className="text-gray-400 text-xs">ID: {cert.credentialId}</p>
+                              <p className="text-gray-500 text-sm">
+                                {cert.date}
+                              </p>
+                              <p className="text-gray-400 text-xs">
+                                ID: {cert.credentialId}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -482,17 +639,24 @@ export default function Profile() {
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Interests & Hobbies</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              Interests & Hobbies
+            </h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {interests.map((interest, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow">
+              {interests.map((interest) => (
+                <Card
+                  key={interest.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div className="p-3 bg-gray-100 rounded-lg">
                         <interest.icon className="h-6 w-6 text-gray-600" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">{interest.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                          {interest.name}
+                        </h3>
                         <p className="text-gray-600">{interest.description}</p>
                       </div>
                     </div>
@@ -508,7 +672,9 @@ export default function Profile() {
       <section className="py-16 px-4">
         <div className="container mx-auto text-center">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Let's Connect</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Let's Connect
+            </h2>
             <p className="text-gray-600 mb-8">
               新しいプロジェクトやコラボレーションの機会をお待ちしています。
               お気軽にお声がけください。
@@ -544,5 +710,5 @@ export default function Profile() {
         </div>
       </footer>
     </div>
-  )
-} 
+  );
+}

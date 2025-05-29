@@ -17,6 +17,14 @@ pnpm build
 # Deploy to Cloudflare Workers
 pnpm deploy
 
+# Linting and Formatting (Biome)
+pnpm lint          # Check for linting issues
+pnpm lint:fix      # Fix linting issues automatically
+pnpm format        # Check formatting
+pnpm format:fix    # Fix formatting automatically
+pnpm check         # Run both linting and formatting checks
+pnpm check:fix     # Fix both linting and formatting issues
+
 # Add shadcn/ui components
 pnpm dlx shadcn@latest add [component-name]
 ```
@@ -63,6 +71,7 @@ This is a **Flight YJN279 Portfolio** - a modern portfolio site built with React
 - Use pnpm exclusively (Volta manages Node.js v24.1.0)
 - Conventional commit format preferred
 - TypeScript strict mode enabled
+- Code quality enforced by Biome (linting + formatting)
 - Error boundaries implemented in `root.tsx`
 - Font: Inter via Google Fonts preconnect
 
