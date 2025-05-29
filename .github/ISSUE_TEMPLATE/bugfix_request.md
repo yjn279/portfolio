@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Use this template for tracking new features.
-title: "feat: [FEATURE NAME]"
-labels: enhancement
+name: Bug fix request
+about: Use this template for tracking bug fixes.
+title: "fix: [BUG NAME]"
+labels: bug
 assignees: ''
 ---
 @claude
