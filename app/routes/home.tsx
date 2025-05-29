@@ -1,28 +1,38 @@
-import type { Route } from "./+types/home";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Plane,
-  Github,
-  ExternalLink,
-  Mail,
-  Twitter,
-  Linkedin,
-  MessageCircle,
-  MapPin,
-  Calendar,
-  Clock,
-  ChevronDown,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   ArrowRight,
   Building,
-} from "lucide-react"
-import { Link } from "react-router"
+  Calendar,
+  ChevronDown,
+  Clock,
+  ExternalLink,
+  Github,
+  Linkedin,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Plane,
+  Twitter,
+} from "lucide-react";
+import { Link } from "react-router";
+import type { Route } from "./+types/home";
 
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
     { title: "Flight YJN279 - Web Engineer Portfolio" },
-    { name: "description", content: "YJN279のポートフォリオサイト。フルスタックWebエンジニアとして、モダンな技術スタックでユーザー体験を向上させるプロダクト開発に取り組んでいます。" },
+    {
+      name: "description",
+      content:
+        "YJN279のポートフォリオサイト。フルスタックWebエンジニアとして、モダンな技術スタックでユーザー体験を向上させるプロダクト開発に取り組んでいます。",
+    },
   ];
 }
 
@@ -33,6 +43,7 @@ export function loader({ context }: Route.LoaderArgs) {
 export default function Portfolio() {
   const projects = [
     {
+      id: "ecommerce-platform",
       title: "E-Commerce Platform",
       description: "Next.js製のフルスタックECサイト",
       tags: ["Next.js", "TypeScript", "Prisma", "Stripe"],
@@ -41,6 +52,7 @@ export default function Portfolio() {
       slides: "https://slides.com/yjn279/ecommerce",
     },
     {
+      id: "task-management-app",
       title: "Task Management App",
       description: "リアルタイム同期機能付きタスク管理アプリ",
       tags: ["React", "Firebase", "Material-UI"],
@@ -49,6 +61,7 @@ export default function Portfolio() {
       slides: null,
     },
     {
+      id: "weather-dashboard",
       title: "Weather Dashboard",
       description: "気象データ可視化ダッシュボード",
       tags: ["Vue.js", "D3.js", "Express.js"],
@@ -56,10 +69,11 @@ export default function Portfolio() {
       demo: "https://weather-dashboard-demo.vercel.app",
       slides: "https://slides.com/yjn279/weather",
     },
-  ]
+  ];
 
   const articles = [
     {
+      id: "nextjs-14-features",
       title: "Next.js 14の新機能を徹底解説",
       description: "App Routerの最新機能とパフォーマンス改善について",
       tags: ["Next.js", "React", "Performance"],
@@ -67,6 +81,7 @@ export default function Portfolio() {
       publishedAt: "2024-01-15",
     },
     {
+      id: "typescript-api-design",
       title: "TypeScriptで型安全なAPI設計",
       description: "tRPCを使った型安全なフルスタック開発",
       tags: ["TypeScript", "tRPC", "API"],
@@ -74,23 +89,27 @@ export default function Portfolio() {
       publishedAt: "2023-12-20",
     },
     {
+      id: "react-performance",
       title: "Reactのパフォーマンス最適化テクニック",
       description: "メモ化とレンダリング最適化の実践的手法",
       tags: ["React", "Performance", "Optimization"],
       url: "https://zenn.dev/yjn279/articles/react-performance",
       publishedAt: "2023-11-10",
     },
-  ]
+  ];
 
   const experiences = [
     {
+      id: "tech-startup-inc",
       company: "Tech Startup Inc.",
       position: "Senior Full Stack Engineer",
       period: "2022 - Present",
-      description: "React/Next.jsとNode.jsを使用したWebアプリケーション開発をリード",
+      description:
+        "React/Next.jsとNode.jsを使用したWebアプリケーション開発をリード",
       technologies: ["React", "Next.js", "TypeScript", "Node.js", "AWS"],
     },
     {
+      id: "digital-agency-co",
       company: "Digital Agency Co.",
       position: "Frontend Engineer",
       period: "2020 - 2022",
@@ -98,13 +117,14 @@ export default function Portfolio() {
       technologies: ["Vue.js", "Nuxt.js", "JavaScript", "SCSS"],
     },
     {
+      id: "web-solutions-ltd",
       company: "Web Solutions Ltd.",
       position: "Junior Developer",
       period: "2019 - 2020",
       description: "HTML/CSS/JavaScriptを使用したWebサイト制作",
       technologies: ["HTML", "CSS", "JavaScript", "jQuery"],
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
@@ -117,21 +137,35 @@ export default function Portfolio() {
                 <Plane className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Flight YJN279</h1>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Flight YJN279
+                </h1>
                 <p className="text-sm text-gray-600">Web Engineer Portfolio</p>
               </div>
             </div>
             <nav className="hidden md:flex items-center gap-6">
-              <a href="#connecting-flights" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a
+                href="#connecting-flights"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+              >
                 Projects
               </a>
-              <a href="#briefing-room" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a
+                href="#briefing-room"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+              >
                 Articles
               </a>
-              <a href="#flight-log" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a
+                href="#flight-log"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+              >
                 Experience
               </a>
-              <a href="#contact" className="text-gray-600 hover:text-blue-600 transition-colors">
+              <a
+                href="#contact"
+                className="text-gray-600 hover:text-blue-600 transition-colors"
+              >
                 Contact
               </a>
             </nav>
@@ -149,12 +183,24 @@ export default function Portfolio() {
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             Welcome aboard
             <br />
-            <span className="text-blue-600">Flight <Link to="/profile" className="underline hover:text-blue-700 transition-colors">YJN279</Link></span>
+            <span className="text-blue-600">
+              Flight{" "}
+              <Link
+                to="/profile"
+                className="underline hover:text-blue-700 transition-colors"
+              >
+                YJN279
+              </Link>
+            </span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-           Hello world. Welcome on board flight YJN279. The captain in command of this website is NAKAMURA Yuji and my co-pilot is <span className="line-through">GitHub</span> Cursor. We are now ready for departure. Please let me know if you need any assistance, and I hope that you enjoy the flight with me 😉
+            Hello world. Welcome on board flight YJN279. The captain in command
+            of this website is NAKAMURA Yuji and my co-pilot is{" "}
+            <span className="line-through">GitHub</span> Cursor. We are now
+            ready for departure. Please let me know if you need any assistance,
+            and I hope that you enjoy the flight with me 😉
           </p>
-          
+
           {/* Scroll Down Animation */}
           <div className="flex flex-col items-center gap-4">
             <p className="text-gray-600">Scroll down to explore</p>
@@ -169,25 +215,39 @@ export default function Portfolio() {
       <section id="connecting-flights" className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Connecting Flights</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Connecting Flights
+            </h2>
             <p className="text-gray-600">ポートフォリオ・開発プロジェクト</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {projects.slice(0, 3).map((project, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+            {projects.slice(0, 3).map((project) => (
+              <Card
+                key={project.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
                     {project.title}
                     <div className="flex gap-2">
-                      <a href={project.github} className="p-1 hover:bg-gray-100 rounded">
+                      <a
+                        href={project.github}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
                         <Github className="h-4 w-4" />
                       </a>
-                      <a href={project.demo} className="p-1 hover:bg-gray-100 rounded">
+                      <a
+                        href={project.demo}
+                        className="p-1 hover:bg-gray-100 rounded"
+                      >
                         <ExternalLink className="h-4 w-4" />
                       </a>
                       {project.slides && (
-                        <a href={project.slides} className="p-1 hover:bg-gray-100 rounded">
+                        <a
+                          href={project.slides}
+                          className="p-1 hover:bg-gray-100 rounded"
+                        >
                           <Plane className="h-4 w-4" />
                         </a>
                       )}
@@ -223,34 +283,53 @@ export default function Portfolio() {
       <section id="briefing-room" className="py-16 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Briefing Room</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Briefing Room
+            </h2>
             <p className="text-gray-600">技術記事・ブログ</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {articles.slice(0, 3).map((article, index) => (
-              <Card key={index} className="hover:shadow-md transition-shadow">
+            {articles.slice(0, 3).map((article) => (
+              <Card
+                key={article.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex flex-col gap-4">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        <a href={article.url} className="hover:text-blue-600 transition-colors">
+                        <a
+                          href={article.url}
+                          className="hover:text-blue-600 transition-colors"
+                        >
                           {article.title}
                         </a>
                       </h3>
-                      <p className="text-gray-600 mb-3 text-sm">{article.description}</p>
+                      <p className="text-gray-600 mb-3 text-sm">
+                        {article.description}
+                      </p>
                       <div className="flex items-center justify-between">
                         <div className="flex flex-wrap gap-1">
                           {article.tags.slice(0, 2).map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               {tag}
                             </Badge>
                           ))}
                         </div>
-                        <span className="text-xs text-gray-500">{article.publishedAt}</span>
+                        <span className="text-xs text-gray-500">
+                          {article.publishedAt}
+                        </span>
                       </div>
                     </div>
-                    <a href={article.url} className="self-end p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <a
+                      href={article.url}
+                      className="self-end p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
                       <ExternalLink className="h-4 w-4" />
                     </a>
                   </div>
@@ -274,44 +353,59 @@ export default function Portfolio() {
       <section id="flight-log" className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Flight Log</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Flight Log
+            </h2>
             <p className="text-gray-600">経歴・職歴</p>
           </div>
 
           <div className="max-w-4xl mx-auto">
             <div className="relative">
               {/* Timeline Line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200"></div>
-              
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200" />
+
               <div className="space-y-8">
-                {experiences.map((exp, index) => (
-                  <div key={index} className="relative flex items-start gap-6">
+                {experiences.map((exp) => (
+                  <div key={exp.id} className="relative flex items-start gap-6">
                     {/* Timeline Dot */}
                     <div className="relative z-10 flex-shrink-0">
                       <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
                         <Building className="h-8 w-8 text-white" />
                       </div>
                     </div>
-                    
+
                     {/* Content Card */}
                     <div className="flex-1 min-w-0">
                       <Card className="hover:shadow-md transition-shadow">
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between gap-4 mb-4">
                             <div>
-                              <h3 className="text-xl font-bold text-gray-900 mb-1">{exp.position}</h3>
-                              <p className="text-blue-600 font-semibold text-lg">{exp.company}</p>
+                              <h3 className="text-xl font-bold text-gray-900 mb-1">
+                                {exp.position}
+                              </h3>
+                              <p className="text-blue-600 font-semibold text-lg">
+                                {exp.company}
+                              </p>
                             </div>
-                            <Badge variant="outline" className="text-sm font-medium px-3 py-1">
+                            <Badge
+                              variant="outline"
+                              className="text-sm font-medium px-3 py-1"
+                            >
                               {exp.period}
                             </Badge>
                           </div>
-                          
-                          <p className="text-gray-600 mb-4 leading-relaxed">{exp.description}</p>
-                          
+
+                          <p className="text-gray-600 mb-4 leading-relaxed">
+                            {exp.description}
+                          </p>
+
                           <div className="flex flex-wrap gap-2">
                             {exp.technologies.map((tech) => (
-                              <Badge key={tech} variant="secondary" className="text-xs">
+                              <Badge
+                                key={tech}
+                                variant="secondary"
+                                className="text-xs"
+                              >
                                 {tech}
                               </Badge>
                             ))}
@@ -331,9 +425,12 @@ export default function Portfolio() {
       <section id="contact" className="py-16 px-4">
         <div className="container mx-auto text-center">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready for Takeoff</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Ready for Takeoff
+            </h2>
             <p className="text-gray-600 mb-8">
-              新しいプロジェクトやチームでの挑戦をお待ちしています。 お気軽にお声がけください。
+              新しいプロジェクトやチームでの挑戦をお待ちしています。
+              お気軽にお声がけください。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
@@ -368,11 +465,14 @@ export default function Portfolio() {
 
       {/* Floating Contact Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg">
+        <Button
+          size="lg"
+          className="rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
+        >
           <Mail className="h-5 w-5 mr-2" />
           Contact YJN279
         </Button>
       </div>
     </div>
-  )
+  );
 }
