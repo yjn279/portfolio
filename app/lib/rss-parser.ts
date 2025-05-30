@@ -4,25 +4,25 @@
 import type { Article } from "@/types";
 
 interface RSSItem {
-  title?: string;
-  link?: string;
-  description?: string;
-  pubDate?: string;
-  guid?: string;
-  content?: string;
+  title?: string | null;
+  link?: string | null;
+  description?: string | null;
+  pubDate?: string | null;
+  guid?: string | null;
+  content?: string | null;
 }
 
 interface ParsedRSS {
-  title?: string;
-  description?: string;
-  link?: string;
+  title?: string | null;
+  description?: string | null;
+  link?: string | null;
   items: RSSItem[];
 }
 
 // Simple XML parser for RSS feeds
 export class RSSParser {
   private extractTextContent(xml: string, tagName: string): string | null {
-    const regex = new RegExp(`<${tagName}[^>]*>(.*?)<\/${tagName}>`, 'is');
+    const regex = new RegExp(`<${tagName}[^>]*>(.*?)<\/${tagName}>`, "is");
     const match = xml.match(regex);
     return match ? match[1].trim() : null;
   }
@@ -30,22 +30,24 @@ export class RSSParser {
   private extractAllItems(xml: string): RSSItem[] {
     const itemRegex = /<item[^>]*>(.*?)<\/item>/gis;
     const items: RSSItem[] = [];
-    let match;
+    let match: RegExpExecArray | null = itemRegex.exec(xml);
 
-    while ((match = itemRegex.exec(xml)) !== null) {
+    while (match !== null) {
       const itemXml = match[1];
-      
+
       const item: RSSItem = {
-        title: this.extractTextContent(itemXml, 'title'),
-        link: this.extractTextContent(itemXml, 'link'),
-        description: this.extractTextContent(itemXml, 'description'),
-        pubDate: this.extractTextContent(itemXml, 'pubDate'),
-        guid: this.extractTextContent(itemXml, 'guid'),
-        content: this.extractTextContent(itemXml, 'content:encoded') || 
-                this.extractTextContent(itemXml, 'content')
+        title: this.extractTextContent(itemXml, "title"),
+        link: this.extractTextContent(itemXml, "link"),
+        description: this.extractTextContent(itemXml, "description"),
+        pubDate: this.extractTextContent(itemXml, "pubDate"),
+        guid: this.extractTextContent(itemXml, "guid"),
+        content:
+          this.extractTextContent(itemXml, "content:encoded") ||
+          this.extractTextContent(itemXml, "content"),
       };
 
       items.push(item);
+      match = itemRegex.exec(xml);
     }
 
     return items;
@@ -56,19 +58,19 @@ export class RSSParser {
     const channelXml = channelMatch ? channelMatch[1] : xmlString;
 
     return {
-      title: this.extractTextContent(channelXml, 'title'),
-      description: this.extractTextContent(channelXml, 'description'),
-      link: this.extractTextContent(channelXml, 'link'),
-      items: this.extractAllItems(channelXml)
+      title: this.extractTextContent(channelXml, "title"),
+      description: this.extractTextContent(channelXml, "description"),
+      link: this.extractTextContent(channelXml, "link"),
+      items: this.extractAllItems(channelXml),
     };
   }
 
   private formatDate(dateString: string): string {
     try {
-      return new Date(dateString).toLocaleDateString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
+      return new Date(dateString).toLocaleDateString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       });
     } catch {
       return dateString;
@@ -84,9 +86,9 @@ export class RSSParser {
 
   private extractDescription(content: string, maxLength = 200): string {
     // Remove HTML tags
-    const textContent = content.replace(/<[^>]*>/g, '');
-    return textContent.length > maxLength 
-      ? textContent.substring(0, maxLength) + "..."
+    const textContent = content.replace(/<[^>]*>/g, "");
+    return textContent.length > maxLength
+      ? `${textContent.substring(0, maxLength)}...`
       : textContent;
   }
 
@@ -94,7 +96,7 @@ export class RSSParser {
     try {
       const rssUrl = `https://zenn.dev/${username}/feed`;
       const response = await fetch(rssUrl);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch Zenn RSS: ${response.status}`);
       }
@@ -105,19 +107,26 @@ export class RSSParser {
       return parsed.items.map((item, index) => ({
         id: `zenn-${item.guid || index}`,
         title: item.title || "Untitled",
-        description: this.extractDescription(item.description || item.content || ""),
-        excerpt: this.extractDescription(item.content || item.description || "", 100),
+        description: this.extractDescription(
+          item.description || item.content || "",
+        ),
+        excerpt: this.extractDescription(
+          item.content || item.description || "",
+          100,
+        ),
         tags: [], // RSS doesn't typically include tags, would need to parse from content
         url: item.link || "",
         publishedAt: this.formatDate(item.pubDate || ""),
-        readTime: this.estimateReadingTime(item.content || item.description || ""),
+        readTime: this.estimateReadingTime(
+          item.content || item.description || "",
+        ),
         views: "N/A", // Not available in RSS
         likes: "N/A", // Not available in RSS
         platform: "Zenn",
-        featured: false
+        featured: false,
       }));
     } catch (error) {
-      console.error('Error fetching Zenn RSS:', error);
+      console.error("Error fetching Zenn RSS:", error);
       throw error;
     }
   }
@@ -126,7 +135,7 @@ export class RSSParser {
     try {
       const rssUrl = `https://note.com/${username}/rss`;
       const response = await fetch(rssUrl);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch Note RSS: ${response.status}`);
       }
@@ -137,19 +146,26 @@ export class RSSParser {
       return parsed.items.map((item, index) => ({
         id: `note-${item.guid || index}`,
         title: item.title || "Untitled",
-        description: this.extractDescription(item.description || item.content || ""),
-        excerpt: this.extractDescription(item.content || item.description || "", 100),
+        description: this.extractDescription(
+          item.description || item.content || "",
+        ),
+        excerpt: this.extractDescription(
+          item.content || item.description || "",
+          100,
+        ),
         tags: [], // RSS doesn't typically include tags
         url: item.link || "",
         publishedAt: this.formatDate(item.pubDate || ""),
-        readTime: this.estimateReadingTime(item.content || item.description || ""),
+        readTime: this.estimateReadingTime(
+          item.content || item.description || "",
+        ),
         views: "N/A", // Not available in RSS
         likes: "N/A", // Not available in RSS
         platform: "Note",
-        featured: false
+        featured: false,
       }));
     } catch (error) {
-      console.error('Error fetching Note RSS:', error);
+      console.error("Error fetching Note RSS:", error);
       throw error;
     }
   }

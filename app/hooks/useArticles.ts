@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { articleApiClient } from "@/lib/api-clients";
 import type { Article } from "@/types";
 import type { ApiResponse } from "@/types/api";
-import { articleApiClient } from "@/lib/api-clients";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseArticlesState {
   articles: Article[];
@@ -15,58 +15,66 @@ interface UseArticlesResult extends UseArticlesState {
   refresh: () => Promise<void>;
 }
 
-export function useArticles(platform?: 'zenn' | 'qiita' | 'note'): UseArticlesResult {
+export function useArticles(
+  platform?: "zenn" | "qiita" | "note",
+): UseArticlesResult {
   const [state, setState] = useState<UseArticlesState>({
     articles: [],
     loading: true,
     error: null,
-    hasMore: false
+    hasMore: false,
   });
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchArticles = async (page = 1, append = false) => {
-    try {
-      setState(prev => ({ ...prev, loading: true, error: null }));
+  const fetchArticles = useCallback(
+    async (page = 1, append = false) => {
+      try {
+        setState((prev) => ({ ...prev, loading: true, error: null }));
 
-      let response: ApiResponse<Article>;
+        let response: ApiResponse<Article>;
 
-      if (platform === 'qiita') {
-        response = await articleApiClient.fetchQiitaArticles(page);
-      } else if (platform === 'zenn') {
-        response = await articleApiClient.fetchZennArticles(page, 20, true); // Use RSS
-      } else if (platform === 'note') {
-        response = await articleApiClient.fetchNoteArticles(page, 20, true); // Use RSS
-      } else {
-        // Fetch all platforms - for now just use Qiita as it's the only working one
-        response = await articleApiClient.fetchQiitaArticles(page);
-      }
+        if (platform === "qiita") {
+          response = await articleApiClient.fetchQiitaArticles(page);
+        } else if (platform === "zenn") {
+          response = await articleApiClient.fetchZennArticles(page, 20, true); // Use RSS
+        } else if (platform === "note") {
+          response = await articleApiClient.fetchNoteArticles(page, 20, true); // Use RSS
+        } else {
+          // Fetch all platforms - for now just use Qiita as it's the only working one
+          response = await articleApiClient.fetchQiitaArticles(page);
+        }
 
-      if (response.error) {
-        setState(prev => ({
+        if (response.error) {
+          setState((prev) => ({
+            ...prev,
+            loading: false,
+            error: response.error?.message || "Unknown error occurred",
+          }));
+          return;
+        }
+
+        setState((prev) => ({
+          ...prev,
+          articles: append
+            ? [...prev.articles, ...response.data]
+            : response.data,
+          loading: false,
+          hasMore: response.hasMore || false,
+        }));
+
+        setCurrentPage(page);
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
           loading: false,
-          error: response.error!.message
+          error:
+            error instanceof Error ? error.message : "記事の取得に失敗しました",
         }));
-        return;
       }
-
-      setState(prev => ({
-        ...prev,
-        articles: append ? [...prev.articles, ...response.data] : response.data,
-        loading: false,
-        hasMore: response.hasMore || false
-      }));
-
-      setCurrentPage(page);
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : "記事の取得に失敗しました"
-      }));
-    }
-  };
+    },
+    [platform],
+  );
 
   const fetchMore = async () => {
     if (state.hasMore && !state.loading) {
@@ -81,12 +89,12 @@ export function useArticles(platform?: 'zenn' | 'qiita' | 'note'): UseArticlesRe
 
   useEffect(() => {
     fetchArticles(1, false);
-  }, [platform]);
+  }, [fetchArticles]);
 
   return {
     ...state,
     fetchMore,
-    refresh
+    refresh,
   };
 }
 
@@ -103,13 +111,13 @@ export function useAllPlatformArticles() {
     qiita: [],
     note: [],
     loading: true,
-    errors: {}
+    errors: {},
   });
 
-  const fetchAllArticles = async () => {
+  const fetchAllArticles = useCallback(async () => {
     try {
-      setState(prev => ({ ...prev, loading: true }));
-      
+      setState((prev) => ({ ...prev, loading: true }));
+
       const results = await articleApiClient.fetchAllArticles();
       const errors: { [key: string]: string } = {};
 
@@ -128,25 +136,26 @@ export function useAllPlatformArticles() {
         qiita: results.qiita.data,
         note: results.note.data,
         loading: false,
-        errors
+        errors,
       });
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         loading: false,
         errors: {
-          general: error instanceof Error ? error.message : "記事の取得に失敗しました"
-        }
+          general:
+            error instanceof Error ? error.message : "記事の取得に失敗しました",
+        },
       }));
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchAllArticles();
-  }, []);
+  }, [fetchAllArticles]);
 
   return {
     ...state,
-    refresh: fetchAllArticles
+    refresh: fetchAllArticles,
   };
 }

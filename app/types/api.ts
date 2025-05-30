@@ -37,7 +37,14 @@ export interface QiitaArticle {
   coediting: boolean;
   comments_count: number;
   created_at: string;
-  group: any | null;
+  group: {
+    created_at: string;
+    description: string;
+    name: string;
+    private: boolean;
+    updated_at: string;
+    url_name: string;
+  } | null;
   id: string;
   likes_count: number;
   private: boolean;
@@ -95,7 +102,7 @@ export interface NoteArticle {
 export interface ApiError {
   message: string;
   status: number;
-  platform: 'zenn' | 'qiita' | 'note';
+  platform: "zenn" | "qiita" | "note";
 }
 
 // Unified response type

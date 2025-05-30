@@ -21,17 +21,18 @@ import {
 } from "lucide-react";
 
 interface ArticlesListProps {
-  platform?: 'zenn' | 'qiita' | 'note';
+  platform?: "zenn" | "qiita" | "note";
   showLoadMore?: boolean;
   showRefresh?: boolean;
 }
 
-export function ArticlesList({ 
-  platform, 
+export function ArticlesList({
+  platform,
   showLoadMore = true,
-  showRefresh = true 
+  showRefresh = true,
 }: ArticlesListProps) {
-  const { articles, loading, error, hasMore, fetchMore, refresh } = useArticles(platform);
+  const { articles, loading, error, hasMore, fetchMore, refresh } =
+    useArticles(platform);
 
   const getPlatformColor = (platform: string) => {
     switch (platform) {
@@ -72,9 +73,7 @@ export function ArticlesList({
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
           記事の取得に失敗しました
         </h3>
-        <p className="text-gray-600 mb-4 max-w-md">
-          {error}
-        </p>
+        <p className="text-gray-600 mb-4 max-w-md">{error}</p>
         {showRefresh && (
           <Button onClick={handleRefresh} variant="outline">
             <RefreshCw className="h-4 w-4 mr-2" />
@@ -95,7 +94,9 @@ export function ArticlesList({
           記事が見つかりませんでした
         </h3>
         <p className="text-gray-600">
-          {platform ? `${platform}に記事がないか、APIエラーが発生しています。` : "記事がないか、APIエラーが発生しています。"}
+          {platform
+            ? `${platform}に記事がないか、APIエラーが発生しています。`
+            : "記事がないか、APIエラーが発生しています。"}
         </p>
       </div>
     );
@@ -106,13 +107,15 @@ export function ArticlesList({
       {/* Control buttons */}
       {showRefresh && (
         <div className="flex justify-end">
-          <Button 
-            onClick={handleRefresh} 
-            variant="outline" 
+          <Button
+            onClick={handleRefresh}
+            variant="outline"
             size="sm"
             disabled={loading}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+            />
             更新
           </Button>
         </div>
@@ -212,11 +215,7 @@ export function ArticlesList({
       {/* Load more button */}
       {showLoadMore && hasMore && (
         <div className="flex justify-center pt-6">
-          <Button 
-            onClick={handleLoadMore} 
-            variant="outline"
-            disabled={loading}
-          >
+          <Button onClick={handleLoadMore} variant="outline" disabled={loading}>
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
