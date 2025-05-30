@@ -23,11 +23,11 @@ export function HeroSection() {
           </span>
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Hello world. Welcome on board flight YJN279. The captain in command
-          of this website is NAKAMURA Yuji and my co-pilot is{" "}
-          <span className="line-through">GitHub</span> Cursor. We are now
-          ready for departure. Please let me know if you need any assistance,
-          and I hope that you enjoy the flight with me 😉
+          Hello world. Welcome on board flight YJN279. The captain in command of
+          this website is NAKAMURA Yuji and my co-pilot is{" "}
+          <span className="line-through">GitHub</span> Cursor. We are now ready
+          for departure. Please let me know if you need any assistance, and I
+          hope that you enjoy the flight with me 😉
         </p>
 
         {/* Scroll Down Animation */}

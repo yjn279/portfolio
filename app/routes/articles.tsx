@@ -1,3 +1,5 @@
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getFeaturedArticles, getOtherArticles } from "@/data/articles";
+import type { Article } from "@/types";
 import {
   ArrowLeft,
   BookOpen,
@@ -18,10 +22,6 @@ import {
   Plane,
 } from "lucide-react";
 import { Link } from "react-router";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { getFeaturedArticles, getOtherArticles } from "@/data/articles";
-import type { Article } from "@/types";
 import type { Route } from "./+types/articles";
 
 export function meta(_: Route.MetaArgs) {

@@ -1,3 +1,5 @@
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,6 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  certifications,
+  education,
+  experiences,
+  interests,
+  skills,
+} from "@/data/profile";
 import {
   ArrowLeft,
   Award,
@@ -27,9 +36,6 @@ import {
   Twitter,
 } from "lucide-react";
 import { Link } from "react-router";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { certifications, education, experiences, interests, skills } from "@/data/profile";
 import type { Route } from "./+types/profile";
 
 export function meta(_: Route.MetaArgs) {
@@ -44,7 +50,6 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Profile() {
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
       <Header showBackButton={true} />

@@ -1,11 +1,11 @@
-import {
-  Award,
-  Camera,
-  Code,
-  Coffee,
-  Music,
-} from "lucide-react";
-import type { Certification, Education, Experience, Interest, SkillCategory } from "@/types";
+import type {
+  Certification,
+  Education,
+  Experience,
+  Interest,
+  SkillCategory,
+} from "@/types";
+import { Award, Camera, Code, Coffee, Music } from "lucide-react";
 
 export const experiences: Experience[] = [
   {

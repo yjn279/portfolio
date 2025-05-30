@@ -23,16 +23,10 @@ function ProjectCard({ project }: ProjectCardProps) {
         <CardTitle className="flex items-center justify-between">
           {project.title}
           <div className="flex gap-2">
-            <a
-              href={project.github}
-              className="p-1 hover:bg-gray-100 rounded"
-            >
+            <a href={project.github} className="p-1 hover:bg-gray-100 rounded">
               <Github className="h-4 w-4" />
             </a>
-            <a
-              href={project.demo}
-              className="p-1 hover:bg-gray-100 rounded"
-            >
+            <a href={project.demo} className="p-1 hover:bg-gray-100 rounded">
               <ExternalLink className="h-4 w-4" />
             </a>
             {project.slides && (

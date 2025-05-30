@@ -1,3 +1,5 @@
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getFeaturedProjects, getOtherProjects } from "@/data/projects";
 import {
   ArrowLeft,
   Calendar,
@@ -17,9 +20,6 @@ import {
   Users,
 } from "lucide-react";
 import { Link } from "react-router";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { getFeaturedProjects, getOtherProjects } from "@/data/projects";
 import type { Route } from "./+types/projects";
 
 export function meta(_: Route.MetaArgs) {

@@ -26,7 +26,8 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Portfolio() {
-  const { isMobileMenuOpen, toggleMobileMenu, scrollToSection } = useMobileMenu();
+  const { isMobileMenuOpen, toggleMobileMenu, scrollToSection } =
+    useMobileMenu();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
@@ -34,7 +35,7 @@ export default function Portfolio() {
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={toggleMobileMenu}
       />
-      
+
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onScrollToSection={scrollToSection}
