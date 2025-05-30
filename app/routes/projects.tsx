@@ -1,3 +1,5 @@
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getFeaturedProjects, getOtherProjects } from "@/data/projects";
 import {
   ArrowLeft,
   Calendar,
@@ -31,146 +34,12 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Projects() {
-  const projects = [
-    {
-      id: "ecommerce-platform",
-      title: "E-Commerce Platform",
-      description:
-        "Next.js製のフルスタックECサイト。Stripe決済、在庫管理、管理者ダッシュボードを実装。",
-      longDescription:
-        "モダンなECサイトプラットフォームで、ユーザー認証、商品管理、決済処理、注文管理などの機能を包括的に実装。レスポンシブデザインとSEO最適化も考慮。",
-      tags: [
-        "Next.js",
-        "TypeScript",
-        "Prisma",
-        "Stripe",
-        "PostgreSQL",
-        "Tailwind CSS",
-      ],
-      github: "https://github.com/yjn279/ecommerce",
-      demo: "https://ecommerce-demo.vercel.app",
-      slides: "https://slides.com/yjn279/ecommerce",
-      status: "完成",
-      duration: "3ヶ月",
-      team: "個人開発",
-      featured: true,
-    },
-    {
-      id: "task-management-app",
-      title: "Task Management App",
-      description:
-        "リアルタイム同期機能付きタスク管理アプリ。チーム協働とプロジェクト管理に最適。",
-      longDescription:
-        "Firebaseを活用したリアルタイムタスク管理アプリケーション。ドラッグ&ドロップ、リアルタイム更新、チーム招待機能を実装。",
-      tags: ["React", "Firebase", "Material-UI", "Redux", "WebSocket"],
-      github: "https://github.com/yjn279/task-manager",
-      demo: "https://task-manager-demo.vercel.app",
-      slides: null,
-      status: "完成",
-      duration: "2ヶ月",
-      team: "個人開発",
-      featured: true,
-    },
-    {
-      id: "weather-dashboard",
-      title: "Weather Dashboard",
-      description:
-        "気象データ可視化ダッシュボード。インタラクティブなチャートとマップ表示。",
-      longDescription:
-        "OpenWeatherMap APIを使用した気象データ可視化ダッシュボード。D3.jsによるインタラクティブなグラフとマップ表示機能。",
-      tags: ["Vue.js", "D3.js", "Express.js", "Chart.js", "OpenWeatherMap API"],
-      github: "https://github.com/yjn279/weather-dashboard",
-      demo: "https://weather-dashboard-demo.vercel.app",
-      slides: "https://slides.com/yjn279/weather",
-      status: "完成",
-      duration: "1ヶ月",
-      team: "個人開発",
-      featured: false,
-    },
-    {
-      id: "blog-cms-platform",
-      title: "Blog CMS Platform",
-      description:
-        "ヘッドレスCMSを活用したブログプラットフォーム。マークダウンエディタ搭載。",
-      longDescription:
-        "Contentful CMSとNext.jsを組み合わせたブログプラットフォーム。マークダウンエディタ、タグ管理、SEO最適化機能を実装。",
-      tags: ["Next.js", "Contentful", "GraphQL", "Markdown", "Vercel"],
-      github: "https://github.com/yjn279/blog-cms",
-      demo: "https://blog-cms-demo.vercel.app",
-      slides: null,
-      status: "完成",
-      duration: "1.5ヶ月",
-      team: "個人開発",
-      featured: false,
-    },
-    {
-      id: "chat-application",
-      title: "Real-time Chat Application",
-      description: "Socket.ioを使用したリアルタイムチャットアプリケーション。",
-      longDescription:
-        "Node.js、Socket.io、Reactを使用したリアルタイムチャットアプリ。プライベートメッセージ、グループチャット、ファイル共有機能を実装。",
-      tags: ["React", "Node.js", "Socket.io", "MongoDB", "Express"],
-      github: "https://github.com/yjn279/chat-app",
-      demo: "https://chat-app-demo.herokuapp.com",
-      slides: null,
-      status: "開発中",
-      duration: "進行中",
-      team: "個人開発",
-      featured: false,
-    },
-    {
-      id: "portfolio-website",
-      title: "Portfolio Website",
-      description:
-        "React Router v7とCloudflareを使用したポートフォリオサイト。",
-      longDescription:
-        "このサイト自体！React Router v7、shadcn/ui、Tailwind CSS v4を使用。航空機テーマのデザインとアニメーションを実装。",
-      tags: [
-        "React Router v7",
-        "TypeScript",
-        "Tailwind CSS",
-        "Cloudflare",
-        "shadcn/ui",
-      ],
-      github: "https://github.com/yjn279/portfolio",
-      demo: "https://yjn279.pages.dev",
-      slides: null,
-      status: "完成",
-      duration: "1週間",
-      team: "個人開発",
-      featured: true,
-    },
-  ];
-
-  const featuredProjects = projects.filter((project) => project.featured);
-  const otherProjects = projects.filter((project) => !project.featured);
+  const featuredProjects = getFeaturedProjects();
+  const otherProjects = getOtherProjects();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="p-2 bg-blue-600 rounded-lg">
-                <Plane className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  Flight YJN279
-                </h1>
-                <p className="text-sm text-gray-600">Web Engineer Portfolio</p>
-              </div>
-            </Link>
-            <Link to="/">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header showBackButton={true} />
 
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
@@ -368,20 +237,7 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-white py-8 px-4">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-2 bg-blue-600 rounded-lg">
-              <Plane className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-semibold text-gray-900">Flight YJN279</span>
-          </div>
-          <p className="text-gray-600 text-sm">
-            © 2025 YJN279 All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
