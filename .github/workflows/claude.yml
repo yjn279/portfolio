@@ -35,3 +35,10 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+          
+      - name: Run Biome
+        run: biome ci .
