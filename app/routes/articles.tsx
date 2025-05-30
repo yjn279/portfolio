@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { ArticlesList } from "@/components/sections/ArticlesList";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { getFeaturedArticles, getOtherArticles } from "@/data/articles";
 import type { Article } from "@/types";
 import {
@@ -236,6 +238,52 @@ export default function Articles() {
         </div>
       </section>
 
+      {/* Live Articles from APIs */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              最新記事（API取得）
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Zenn、Qiita、Noteから最新の記事を自動取得して表示しています。
+              現在はQiitaのAPIのみ利用可能です。
+            </p>
+          </div>
+          
+          {/* Qiita Articles */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <Badge className="bg-green-100 text-green-800">Qiita</Badge>
+              記事一覧
+            </h3>
+            <ArticlesList platform="qiita" showLoadMore={true} showRefresh={true} />
+          </div>
+
+          <Separator className="my-8" />
+          
+          {/* Zenn Articles */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <Badge className="bg-blue-100 text-blue-800">Zenn</Badge>
+              記事一覧（RSSフィード）
+            </h3>
+            <ArticlesList platform="zenn" showLoadMore={false} showRefresh={true} />
+          </div>
+
+          <Separator className="my-8" />
+          
+          {/* Note Articles */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <Badge className="bg-purple-100 text-purple-800">Note</Badge>
+              記事一覧（RSSフィード）
+            </h3>
+            <ArticlesList platform="note" showLoadMore={false} showRefresh={true} />
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto text-center">
@@ -248,13 +296,29 @@ export default function Articles() {
               ZennやQiitaでフォローして、新しい記事の通知を受け取りましょう。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Follow on Zenn
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700"
+                asChild
+              >
+                <a 
+                  href="https://zenn.dev/yuji0207" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Follow on Zenn
+                </a>
               </Button>
-              <Button variant="outline" size="lg">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Follow on Qiita
+              <Button variant="outline" size="lg" asChild>
+                <a 
+                  href="https://qiita.com/yjn279" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Follow on Qiita
+                </a>
               </Button>
             </div>
           </div>
