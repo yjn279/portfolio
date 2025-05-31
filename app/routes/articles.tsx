@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { ArticlesList } from "@/components/sections/ArticlesList";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -236,8 +237,15 @@ export default function Articles() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Latest Articles (API) */}
       <section className="py-16 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <ArticlesList />
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 bg-white">
         <div className="container mx-auto text-center">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">

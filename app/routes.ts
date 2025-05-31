@@ -5,4 +5,5 @@ export default [
   route("projects", "routes/projects.tsx"),
   route("articles", "routes/articles.tsx"),
   route("profile", "routes/profile.tsx"),
+  route("api/articles", "routes/api.articles.tsx"),
 ] satisfies RouteConfig;
