@@ -70,3 +70,15 @@ export interface SkillCategory {
   cloud: string[];
   tools: string[];
 }
+
+export interface Award {
+  id: string;
+  title: string;
+  category: string;
+  issuer: string;
+  date: string;
+  description: string;
+  achievement?: string;
+  rank?: string;
+  url?: string;
+}

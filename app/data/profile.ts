@@ -1,11 +1,12 @@
 import type {
+  Award,
   Certification,
   Education,
   Experience,
   Interest,
   SkillCategory,
 } from "@/types";
-import { Award, Camera, Code, Coffee, Music } from "lucide-react";
+import { Camera, Code, Coffee, Music } from "lucide-react";
 
 export const experiences: Experience[] = [
   {
@@ -173,4 +174,56 @@ export const interests: Interest[] = [
     name: "コーヒー",
     description: "スペシャルティコーヒー、ハンドドリップ",
   },
+];
+
+export const awards: Award[] = [
+  {
+    id: "hackathon-grand-prize-2023",
+    title: "Tech Innovation Hackathon 2023",
+    category: "競技プログラミング・ハッカソン",
+    issuer: "Japan Tech Society",
+    date: "2023年10月",
+    description: "AI活用による社会課題解決をテーマとしたハッカソンで最優秀賞を受賞",
+    achievement: "グランプリ（全100チーム中1位）",
+    rank: "1位",
+    url: "https://example.com/hackathon-2023"
+  },
+  {
+    id: "web-excellence-award-2023",
+    title: "Web Excellence Awards",
+    category: "Web開発",
+    issuer: "Web Developers Association",
+    date: "2023年6月",
+    description: "革新的なユーザーエクスペリエンスと技術的実装が評価され、優秀賞を受賞",
+    achievement: "優秀賞",
+    url: "https://example.com/web-excellence"
+  },
+  {
+    id: "open-source-contributor-2022",
+    title: "Outstanding Open Source Contributor",
+    category: "オープンソース貢献",
+    issuer: "GitHub",
+    date: "2022年12月",
+    description: "React.jsエコシステムへの継続的な貢献が認められ、年間貢献者として表彰",
+    achievement: "年間貢献者",
+  },
+  {
+    id: "university-thesis-award",
+    title: "卒業論文優秀賞",
+    category: "学術研究",
+    issuer: "東京工業大学",
+    date: "2019年3月",
+    description: "機械学習を用いたWebアプリケーション最適化に関する研究で優秀賞を受賞",
+    achievement: "優秀賞",
+  },
+  {
+    id: "programming-contest-2018",
+    title: "ACM-ICPC アジア地区予選",
+    category: "競技プログラミング・ハッカソン",
+    issuer: "ACM",
+    date: "2018年11月",
+    description: "国際大学対抗プログラミングコンテストのアジア地区予選に出場し、上位入賞",
+    achievement: "アジア地区予選出場・上位入賞",
+    rank: "上位20%"
+  }
 ];

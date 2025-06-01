@@ -54,6 +54,12 @@ export function Header({
                   Articles
                 </a>
                 <a
+                  href="#trophy-case"
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  Awards
+                </a>
+                <a
                   href="#flight-log"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >

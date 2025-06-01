@@ -26,6 +26,13 @@ export function MobileMenu({ isOpen, onScrollToSection }: MobileMenuProps) {
           </button>
           <button
             type="button"
+            onClick={() => onScrollToSection("trophy-case")}
+            className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
+          >
+            Awards
+          </button>
+          <button
+            type="button"
             onClick={() => onScrollToSection("flight-log")}
             className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
           >

@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { ArticlesSection } from "@/components/sections/ArticlesSection";
+import { AwardsSection } from "@/components/sections/AwardsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -44,6 +45,7 @@ export default function Portfolio() {
       <HeroSection />
       <ProjectsSection />
       <ArticlesSection />
+      <AwardsSection />
       <ExperienceSection />
       <ContactSection />
       <Footer />
