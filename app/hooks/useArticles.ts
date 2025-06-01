@@ -1,115 +1,206 @@
-import { useState, useEffect } from "react";
-import type { Article, ApiError } from "@/types";
-import { fetchAllArticles, fetchArticlesByPlatform } from "@/lib/api";
+import { articleApiClient } from "@/lib/api-clients";
+import type { Article } from "@/types";
+import type { ApiResponse } from "@/types/api";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseArticlesState {
   articles: Article[];
   loading: boolean;
-  errors: ApiError[];
-  refetch: () => Promise<void>;
+  error: string | null;
+  hasMore: boolean;
 }
 
-interface UseArticlesOptions {
-  platform?: "Zenn" | "Qiita" | "Note";
-  autoFetch?: boolean;
+interface UseArticlesResult extends UseArticlesState {
+  fetchMore: () => Promise<void>;
+  refresh: () => Promise<void>;
 }
 
-/**
- * 記事一覧を取得・管理するカスタムフック
- */
-export function useArticles(options: UseArticlesOptions = {}): UseArticlesState {
-  const { platform, autoFetch = true } = options;
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState<ApiError[]>([]);
-
-  const fetchArticles = async () => {
-    setLoading(true);
-    setErrors([]);
-    
-    try {
-      if (platform) {
-        // 特定のプラットフォームのみ取得
-        const articleList = await fetchArticlesByPlatform(platform);
-        setArticles(articleList);
-      } else {
-        // 全プラットフォームから取得
-        const { articles: articleList, errors: apiErrors } = await fetchAllArticles();
-        setArticles(articleList);
-        setErrors(apiErrors);
-      }
-    } catch (error) {
-      const apiError: ApiError = {
-        message: error instanceof Error ? error.message : "記事の取得に失敗しました",
-        platform: platform || "Zenn" // fallback
-      };
-      setErrors([apiError]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (autoFetch) {
-      fetchArticles();
-    }
-  }, [platform, autoFetch]);
-
-  return {
-    articles,
-    loading,
-    errors,
-    refetch: fetchArticles
-  };
+interface FilterOptions {
+  platform?: string;
+  tags?: string[];
+  featured?: boolean;
 }
 
-/**
- * 記事をフィルタリングするヘルパー関数
- */
+// Article filtering utility function
 export function filterArticles(
   articles: Article[],
-  filters: {
-    platform?: string;
-    tags?: string[];
-    featured?: boolean;
-  }
+  options: FilterOptions,
 ): Article[] {
   return articles.filter((article) => {
-    if (filters.platform && article.platform !== filters.platform) {
+    // Platform filter
+    if (
+      options.platform &&
+      options.platform !== "all" &&
+      article.platform !== options.platform
+    ) {
       return false;
     }
-    
-    if (filters.tags && filters.tags.length > 0) {
-      const hasMatchingTag = filters.tags.some(tag => 
-        article.tags.some(articleTag => 
-          articleTag.toLowerCase().includes(tag.toLowerCase())
-        )
+
+    // Tags filter
+    if (options.tags && options.tags.length > 0) {
+      const hasMatchingTag = options.tags.some((tag) =>
+        article.tags.some((articleTag) =>
+          articleTag.toLowerCase().includes(tag.toLowerCase()),
+        ),
       );
       if (!hasMatchingTag) {
         return false;
       }
     }
-    
-    if (filters.featured !== undefined && article.featured !== filters.featured) {
+
+    // Featured filter
+    if (
+      options.featured !== undefined &&
+      article.featured !== options.featured
+    ) {
       return false;
     }
-    
+
     return true;
   });
 }
 
-/**
- * 記事を検索するヘルパー関数
- */
-export function searchArticles(articles: Article[], query: string): Article[] {
-  if (!query.trim()) {
-    return articles;
-  }
-  
-  const lowerQuery = query.toLowerCase();
-  return articles.filter((article) => 
-    article.title.toLowerCase().includes(lowerQuery) ||
-    article.description.toLowerCase().includes(lowerQuery) ||
-    article.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+export function useArticles(
+  platform?: "zenn" | "qiita" | "note",
+): UseArticlesResult {
+  const [state, setState] = useState<UseArticlesState>({
+    articles: [],
+    loading: true,
+    error: null,
+    hasMore: false,
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchArticles = useCallback(
+    async (page = 1, append = false) => {
+      try {
+        setState((prev) => ({ ...prev, loading: true, error: null }));
+
+        let response: ApiResponse<Article>;
+
+        if (platform === "qiita") {
+          response = await articleApiClient.fetchQiitaArticles(page);
+        } else if (platform === "zenn") {
+          response = await articleApiClient.fetchZennArticles(page, 20, true); // Use RSS
+        } else if (platform === "note") {
+          response = await articleApiClient.fetchNoteArticles(page, 20, true); // Use RSS
+        } else {
+          // Fetch all platforms - for now just use Qiita as it's the only working one
+          response = await articleApiClient.fetchQiitaArticles(page);
+        }
+
+        if (response.error) {
+          setState((prev) => ({
+            ...prev,
+            loading: false,
+            error: response.error?.message ?? "記事の取得に失敗しました",
+          }));
+          return;
+        }
+
+        setState((prev) => ({
+          ...prev,
+          articles: append
+            ? [...prev.articles, ...response.data]
+            : response.data,
+          loading: false,
+          hasMore: response.hasMore || false,
+        }));
+
+        setCurrentPage(page);
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          error:
+            error instanceof Error ? error.message : "記事の取得に失敗しました",
+        }));
+      }
+    },
+    [platform],
   );
+
+  const fetchMore = async () => {
+    if (state.hasMore && !state.loading) {
+      await fetchArticles(currentPage + 1, true);
+    }
+  };
+
+  const refresh = async () => {
+    setCurrentPage(1);
+    await fetchArticles(1, false);
+  };
+
+  useEffect(() => {
+    fetchArticles(1, false);
+  }, [fetchArticles]);
+
+  return {
+    ...state,
+    fetchMore,
+    refresh,
+  };
+}
+
+// Hook for fetching articles from all platforms
+export function useAllPlatformArticles() {
+  const [state, setState] = useState<{
+    zenn: Article[];
+    qiita: Article[];
+    note: Article[];
+    loading: boolean;
+    errors: { [key: string]: string };
+  }>({
+    zenn: [],
+    qiita: [],
+    note: [],
+    loading: true,
+    errors: {},
+  });
+
+  const fetchAllArticles = useCallback(async () => {
+    try {
+      setState((prev) => ({ ...prev, loading: true }));
+
+      const results = await articleApiClient.fetchAllArticles();
+      const errors: { [key: string]: string } = {};
+
+      if (results.zenn.error) {
+        errors.zenn = results.zenn.error.message;
+      }
+      if (results.qiita.error) {
+        errors.qiita = results.qiita.error.message;
+      }
+      if (results.note.error) {
+        errors.note = results.note.error.message;
+      }
+
+      setState({
+        zenn: results.zenn.data,
+        qiita: results.qiita.data,
+        note: results.note.data,
+        loading: false,
+        errors,
+      });
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        errors: {
+          general:
+            error instanceof Error ? error.message : "記事の取得に失敗しました",
+        },
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllArticles();
+  }, [fetchAllArticles]);
+
+  return {
+    ...state,
+    refresh: fetchAllArticles,
+  };
 }

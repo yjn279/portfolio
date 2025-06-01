@@ -120,7 +120,11 @@ export interface QiitaItem {
   coediting: boolean;
   comments_count: number;
   created_at: string;
-  group: any;
+  group: {
+    id: number;
+    name: string;
+    url_name: string;
+  } | null;
   id: string;
   likes_count: number;
   private: boolean;
