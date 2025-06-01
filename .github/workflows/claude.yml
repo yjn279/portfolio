@@ -47,7 +47,7 @@ jobs:
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "Bash(biome ci .)"
+          allowed_tools: "Bash(biome ci),Bash(biome ci .),Bash(pnpm install),Bash(pnpm build),Bash(pnpm check:fix)"
           assignee_trigger: "claude"
   
   quality:
