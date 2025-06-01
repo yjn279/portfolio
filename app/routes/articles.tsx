@@ -9,20 +9,75 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getFeaturedArticles, getOtherArticles } from "@/data/articles";
-import type { Article } from "@/types";
 import {
-  ArrowLeft,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   BookOpen,
   Calendar,
-  Clock,
   ExternalLink,
-  Eye,
   Heart,
-  Plane,
+  SortDesc,
 } from "lucide-react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { data, useLoaderData } from "react-router";
 import type { Route } from "./+types/articles";
+
+// Zenn API response types
+interface ZennArticle {
+  id: number;
+  title: string;
+  slug: string;
+  liked_count: number;
+  bookmarked_count: number;
+  comments_count: number;
+  body_letters_count: number;
+  article_type: "tech" | "idea";
+  emoji: string;
+  published_at: string;
+  body_updated_at: string;
+  path: string;
+  user: {
+    id: number;
+    username: string;
+    name: string;
+    avatar_small_url: string;
+  };
+  publication?: {
+    id: number;
+    name: string;
+    display_name: string;
+    avatar_small_url: string;
+  } | null;
+}
+
+interface ZennApiResponse {
+  articles: ZennArticle[];
+  next_page: string | null;
+  total_count: number | null;
+}
+
+type SortOption = "latest" | "likes";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  try {
+    const response = await fetch(
+      "https://zenn.dev/api/articles?username=yuji207",
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch articles");
+    }
+    const zennData: ZennApiResponse = await response.json();
+    return data({ articles: zennData.articles });
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    return data({ articles: [] });
+  }
+}
 
 export function meta(_: Route.MetaArgs) {
   return [
@@ -36,23 +91,34 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Articles() {
-  const featuredArticles = getFeaturedArticles();
-  const otherArticles = getOtherArticles();
+  const { articles } = useLoaderData<typeof loader>();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("latest");
 
-  const getPlatformColor = (platform: string) => {
-    switch (platform) {
-      case "Zenn":
-        return "bg-blue-100 text-blue-800";
-      case "Qiita":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
+  // Sort articles based on selected option
+  const sortedArticles = [...articles].sort((a, b) => {
+    if (sortBy === "likes") {
+      return b.liked_count - a.liked_count;
     }
+    // Default: sort by update date (latest first)
+    return new Date(b.body_updated_at).getTime() - new Date(a.body_updated_at).getTime();
+  });
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header showBackButton={true} />
+      <Header
+        showBackButton={true}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      />
 
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
@@ -71,77 +137,73 @@ export default function Articles() {
         </div>
       </section>
 
-      {/* Featured Articles */}
+      {/* Articles Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Featured Articles
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {featuredArticles.map((article) => (
+          {/* Sort Controls */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">
+              Articles ({articles.length})
+            </h2>
+            <div className="flex items-center gap-2">
+              <SortDesc className="h-4 w-4 text-gray-500" />
+              <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="並び順" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="latest">更新日順</SelectItem>
+                  <SelectItem value="likes">いいね順</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Articles Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sortedArticles.map((article) => (
               <Card
                 key={article.id}
-                className="hover:shadow-xl transition-all duration-300 border-2 border-blue-100"
+                className="hover:shadow-xl transition-all duration-300 border-2 hover:border-blue-200"
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <Badge
                       variant="secondary"
-                      className={getPlatformColor(article.platform)}
+                      className="bg-blue-100 text-blue-800"
                     >
-                      {article.platform}
+                      Zenn
                     </Badge>
                     <a
-                      href={article.url}
-                      className="p-1 hover:bg-gray-100 rounded"
+                      href={`https://zenn.dev${article.path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1 hover:bg-gray-100 rounded transition-colors"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </a>
                   </div>
-                  <CardTitle className="text-xl">
+                  <CardTitle className="text-xl leading-tight">
                     <a
-                      href={article.url}
+                      href={`https://zenn.dev${article.path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="hover:text-blue-600 transition-colors"
                     >
                       {article.title}
                     </a>
                   </CardTitle>
-                  <CardDescription className="text-base">
-                    {article.description}
-                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <p className="text-sm text-gray-600 italic">
-                      "{article.excerpt}"
-                    </p>
-                    <div className="flex flex-wrap gap-1">
-                      {article.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
                     <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{article.publishedAt}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>{article.readTime}</span>
-                        </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        <span>{formatDate(article.body_updated_at)}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-4 w-4" />
-                          <span>{article.views}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Heart className="h-4 w-4" />
-                          <span>{article.likes}</span>
-                        </div>
+                      <div className="flex items-center gap-1">
+                        <Heart className="h-4 w-4" />
+                        <span>{article.liked_count}</span>
                       </div>
                     </div>
                   </div>
@@ -149,95 +211,17 @@ export default function Articles() {
               </Card>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Other Articles */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Other Articles
-          </h2>
-          <div className="space-y-6 max-w-4xl mx-auto">
-            {otherArticles.map((article) => (
-              <Card
-                key={article.id}
-                className="hover:shadow-md transition-shadow"
-              >
-                <CardContent className="p-6">
-                  <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Badge
-                          variant="secondary"
-                          className={getPlatformColor(article.platform)}
-                        >
-                          {article.platform}
-                        </Badge>
-                        <span className="text-sm text-gray-500">
-                          {article.publishedAt}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        <a
-                          href={article.url}
-                          className="hover:text-blue-600 transition-colors"
-                        >
-                          {article.title}
-                        </a>
-                      </h3>
-                      <p className="text-gray-600 mb-3">
-                        {article.description}
-                      </p>
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <div className="flex flex-wrap gap-1">
-                          {article.tags.slice(0, 3).map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="outline"
-                              className="text-xs"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                          {article.tags.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{article.tags.length - 3}
-                            </Badge>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{article.readTime}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Eye className="h-4 w-4" />
-                            <span>{article.views}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Heart className="h-4 w-4" />
-                            <span>{article.likes}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <a
-                      href={article.url}
-                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors sm:self-start"
-                    >
-                      <ExternalLink className="h-5 w-5" />
-                    </a>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {articles.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-gray-500 text-lg">記事が見つかりませんでした。</p>
+            </div>
+          )}
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-white">
         <div className="container mx-auto text-center">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -245,18 +229,22 @@ export default function Articles() {
             </h2>
             <p className="text-gray-600 mb-8">
               最新の技術記事やブログ投稿をお見逃しなく。
-              ZennやQiitaでフォローして、新しい記事の通知を受け取りましょう。
+              Zennでフォローして、新しい記事の通知を受け取りましょう。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700"
+              asChild
+            >
+              <a
+                href="https://zenn.dev/yuji207"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Follow on Zenn
-              </Button>
-              <Button variant="outline" size="lg">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Follow on Qiita
-              </Button>
-            </div>
+              </a>
+            </Button>
           </div>
         </div>
       </section>
