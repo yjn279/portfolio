@@ -18,12 +18,8 @@ pnpm build
 pnpm deploy
 
 # Linting and Formatting (Biome)
-pnpm lint          # Check for linting issues
-pnpm lint:fix      # Fix linting issues automatically
-pnpm format        # Check formatting
-pnpm format:fix    # Fix formatting automatically
-pnpm check         # Run both linting and formatting checks
-pnpm check:fix     # Fix both linting and formatting issues
+pnpm check:fix
+biome ci .  # In CI, you can use this command instead of `pnpm check:fix`
 
 # Add shadcn/ui components
 pnpm dlx shadcn@latest add [component-name]
