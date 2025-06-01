@@ -34,8 +34,8 @@ jobs:
       #   with:
       #     version: latest
 
-      - name: Install dependencies
-        run: pnpm install
+      # - name: Install dependencies
+      #   run: pnpm install
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
