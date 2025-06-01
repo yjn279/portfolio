@@ -28,7 +28,7 @@ import {
   Plane,
   SortDesc,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { data, useLoaderData } from "react-router";
 import type { Route } from "./+types/articles";
 
@@ -134,6 +134,13 @@ interface NoteApiResponse {
   };
 }
 
+// Microlink API response type
+interface MicrolinkApiResponse {
+  data?: {
+    description?: string;
+  };
+}
+
 // Unified article interface
 interface UnifiedArticle {
   id: string;
@@ -142,6 +149,7 @@ interface UnifiedArticle {
   liked_count: number;
   updated_at: string;
   platform: "Zenn" | "Qiita" | "Note";
+  created_at?: string;
 }
 
 type SortOption = "latest" | "likes";
@@ -169,6 +177,7 @@ export async function loader({ request }: Route.LoaderArgs) {
           liked_count: article.liked_count,
           updated_at: article.body_updated_at,
           platform: "Zenn" as const,
+          created_at: article.published_at,
         }),
       );
       unifiedArticles.push(...zennArticles);
@@ -184,6 +193,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         liked_count: article.likes_count,
         updated_at: article.updated_at,
         platform: "Qiita" as const,
+        created_at: article.created_at,
       }));
       unifiedArticles.push(...qiitaArticles);
     }
@@ -199,6 +209,7 @@ export async function loader({ request }: Route.LoaderArgs) {
           liked_count: content.likeCount, // Updated: correct field name
           updated_at: content.updated_at,
           platform: "Note" as const,
+          created_at: content.publish_at || content.updated_at,
         }),
       );
       unifiedArticles.push(...noteArticles);
@@ -308,6 +319,47 @@ export default function Articles() {
     }
   };
 
+  // Microlink description cache
+  const [descriptions, setDescriptions] = useState<Record<string, string>>({});
+  const [loadingDesc, setLoadingDesc] = useState<Record<string, boolean>>({});
+  const [errorDesc, setErrorDesc] = useState<Record<string, boolean>>({});
+
+  // Fetch description for a given article URL
+  const fetchDescription = useCallback(async (id: string, url: string) => {
+    setLoadingDesc((prev) => ({ ...prev, [id]: true }));
+    setErrorDesc((prev) => ({ ...prev, [id]: false }));
+    try {
+      const res = await fetch(
+        `https://api.microlink.io/?url=${encodeURIComponent(url)}`,
+      );
+      const data: MicrolinkApiResponse = await res.json();
+      const desc = data?.data?.description || "";
+      setDescriptions((prev) => ({ ...prev, [id]: desc }));
+    } catch (e) {
+      setErrorDesc((prev) => ({ ...prev, [id]: true }));
+    } finally {
+      setLoadingDesc((prev) => ({ ...prev, [id]: false }));
+    }
+  }, []);
+
+  // Prefetch descriptions for visible articles
+  useEffect(() => {
+    for (const article of sortedArticles) {
+      if (
+        !descriptions[article.id] &&
+        !loadingDesc[article.id] &&
+        !errorDesc[article.id]
+      ) {
+        fetchDescription(article.id, article.url);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortedArticles, descriptions, loadingDesc, errorDesc, fetchDescription]);
+
+  // Helper to get created date for any article
+  const getCreatedAt = (article: UnifiedArticle) =>
+    article.created_at || article.updated_at;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
       <Header
@@ -416,74 +468,86 @@ export default function Articles() {
           {/* Boarding Pass Style Articles Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedArticles.map((article, index) => (
-              <Card
+              <a
                 key={article.id}
-                className="group hover:shadow-2xl transition-all duration-500 border-2 border-blue-100 bg-white hover:border-blue-300 hover:-translate-y-1 overflow-hidden"
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group cursor-pointer hover:shadow-2xl transition-all duration-500 border-2 border-blue-100 bg-white hover:border-blue-300 hover:-translate-y-1 overflow-hidden outline-none focus:ring-2 focus:ring-blue-400 rounded-xl"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                {/* Boarding Pass Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge
-                      className={`${getPlatformColor(article.platform)} font-medium px-3 py-1 text-xs`}
-                    >
-                      {article.platform}
-                    </Badge>
-                    <div className="flex items-center gap-2 text-blue-100">
-                      <Clock className="h-3 w-3" />
-                      <span className="text-xs font-mono">
-                        {formatDate(article.updated_at)}
+                <Card className="border-0 shadow-none bg-transparent p-0">
+                  {/* ヘッダー（右側の外部リンクアイコンは削除） */}
+                  <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2"></CardHeader>
+                  {/* 記事タイトル・description・いいね数＋日付 */}
+                  <CardHeader className="pt-0 pb-3">
+                    <CardTitle className="text-lg leading-tight text-gray-900 group-hover:text-blue-700 transition-colors flex items-center gap-2">
+                      <span className="hover:underline decoration-2 underline-offset-2 decoration-blue-400">
+                        {article.title}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Open in new tab"
+                        className="focus:outline-none"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          window.open(
+                            article.url,
+                            "_blank",
+                            "noopener,noreferrer",
+                          );
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            window.open(
+                              article.url,
+                              "_blank",
+                              "noopener,noreferrer",
+                            );
+                          }
+                        }}
+                      >
+                        <ExternalLink className="h-4 w-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                      </button>
+                    </CardTitle>
+                    {/* Description from Microlink */}
+                    <div className="mt-2 text-gray-600 text-sm min-h-[2em]">
+                      {loadingDesc[article.id] && <span>Loading...</span>}
+                      {errorDesc[article.id] && (
+                        <span className="text-red-400">取得失敗</span>
+                      )}
+                      {!loadingDesc[article.id] &&
+                        !errorDesc[article.id] &&
+                        descriptions[article.id]}
+                    </div>
+                    {/* Like count (いいね数) + Created/Updated at */}
+                    <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <Badge
+                          className={`${getPlatformColor(article.platform)} font-medium px-3 py-1 text-xs`}
+                        >
+                          {article.platform}
+                        </Badge>
+                        <span className="flex items-center gap-1 text-red-500 text-sm">
+                          <Heart className="h-4 w-4 fill-current" />
+                          <span className="font-semibold">
+                            {article.liked_count}
+                          </span>
+                        </span>
+                      </span>
+                      <span>
+                        Created at {formatDate(getCreatedAt(article))}
+                      </span>
+                      <span>
+                        Updated at {formatDate(article.updated_at)}
                       </span>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-xs font-mono text-blue-100">
-                      FLIGHT YJN279
-                    </div>
-                    <a
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 hover:bg-blue-500 rounded-lg transition-colors group/link"
-                    >
-                      <ExternalLink className="h-4 w-4 group-hover/link:scale-110 transition-transform" />
-                    </a>
-                  </div>
-                </div>
-
-                {/* Article Content */}
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg leading-tight text-gray-900 group-hover:text-blue-700 transition-colors">
-                    <a
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline decoration-2 underline-offset-2 decoration-blue-400"
-                    >
-                      {article.title}
-                    </a>
-                  </CardTitle>
-                </CardHeader>
-
-                {/* Boarding Pass Footer */}
-                <CardContent className="pt-0">
-                  <div className="border-t border-dashed border-gray-200 pt-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <span className="text-xs font-mono uppercase tracking-wide">
-                          Passenger Rating
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1 rounded-full">
-                        <Heart className="h-3 w-3 fill-current" />
-                        <span className="font-bold text-sm">
-                          {article.liked_count}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardHeader>
+                </Card>
+              </a>
             ))}
           </div>
 
