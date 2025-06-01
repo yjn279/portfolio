@@ -19,6 +19,7 @@ import {
   Star,
   Users,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/projects";
 
@@ -34,12 +35,17 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Projects() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const featuredProjects = getFeaturedProjects();
   const otherProjects = getOtherProjects();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header showBackButton={true} />
+      <Header
+        showBackButton={true}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      />
 
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">

@@ -35,6 +35,7 @@ import {
   Plane,
   Twitter,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/profile";
 
@@ -50,9 +51,15 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Profile() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header showBackButton={true} />
+      <Header
+        showBackButton={true}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      />
 
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
@@ -338,7 +345,7 @@ export default function Profile() {
                               主な成果・実績
                             </h4>
                             <ul className="space-y-1">
-                              {exp.achievements.map((achievement, i) => (
+                              {exp.achievements?.map((achievement, i) => (
                                 <li
                                   key={`${exp.id}-achievement-${i}`}
                                   className="text-gray-600 text-sm flex items-start gap-2"

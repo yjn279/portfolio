@@ -5,6 +5,12 @@ alwaysApply: true
 ---
 # 開発ワークフロー & ベストプラクティス
 
+実装した場合、常に以下のコマンドを実行してエラーが出ていないことを確認する。
+
+1. `pnpm check:fix` 
+2. `pnpm typecheck`
+3. `pnpm build`
+
 ## パッケージ管理
 - **pnpmを常に使用**: Voltaによる一貫したバージョン管理
 - **Node.jsバージョン**: 最新LTS（[package.json](mdc:package.json)でVolta固定）
