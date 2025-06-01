@@ -19,7 +19,6 @@ pnpm deploy
 
 # Linting and Formatting (Biome)
 pnpm check:fix
-biome ci .  # In CI, you can use this command instead of `pnpm check:fix`
 
 # Add shadcn/ui components
 pnpm dlx shadcn@latest add [component-name]
