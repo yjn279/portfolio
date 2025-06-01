@@ -61,18 +61,137 @@ interface ZennApiResponse {
   total_count: number | null;
 }
 
+// Qiita API response types
+interface QiitaTag {
+  name: string;
+  versions: string[];
+}
+
+interface QiitaUser {
+  description: string;
+  facebook_id: string;
+  followees_count: number;
+  followers_count: number;
+  github_login_name: string;
+  id: string;
+  items_count: number;
+  linkedin_id: string;
+  location: string;
+  name: string;
+  organization: string;
+  permanent_id: number;
+  profile_image_url: string;
+  team_only: boolean;
+  twitter_screen_name: string;
+  website_url: string;
+}
+
+interface QiitaArticle {
+  rendered_body: string;
+  body: string;
+  coediting: boolean;
+  comments_count: number;
+  created_at: string;
+  group?: null | object;
+  id: string;
+  likes_count: number;
+  private: boolean;
+  reactions_count: number;
+  stock_count: number;
+  tags: QiitaTag[];
+  title: string;
+  updated_at: string;
+  url: string;
+  user: QiitaUser;
+  page_views_count?: number;
+}
+
+// Note API response types (estimated structure)
+interface NoteContent {
+  id: string;
+  name: string;
+  user: {
+    urlname: string;
+    nickname: string;
+  };
+  publish_at: string;
+  updated_at: string;
+  like_count: number;
+  note_url: string;
+}
+
+interface NoteApiResponse {
+  data: {
+    contents: NoteContent[];
+  };
+}
+
+// Unified article interface
+interface UnifiedArticle {
+  id: string;
+  title: string;
+  url: string;
+  liked_count: number;
+  updated_at: string;
+  platform: "Zenn" | "Qiita" | "Note";
+}
+
 type SortOption = "latest" | "likes";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
-    const response = await fetch(
-      "https://zenn.dev/api/articles?username=yuji207",
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch articles");
+    // Fetch from all APIs in parallel
+    const [zennResponse, qiitaResponse, noteResponse] = await Promise.all([
+      fetch("https://zenn.dev/api/articles?username=yuji207"),
+      fetch("https://qiita.com/api/v2/users/yjn279/items?per_page=100"),
+      fetch("https://note.com/api/v2/creators/yjn279/contents?kind=note")
+    ]);
+
+    const unifiedArticles: UnifiedArticle[] = [];
+
+    // Process Zenn articles
+    if (zennResponse.ok) {
+      const zennData: ZennApiResponse = await zennResponse.json();
+      const zennArticles: UnifiedArticle[] = zennData.articles.map((article) => ({
+        id: `zenn-${article.id}`,
+        title: article.title,
+        url: `https://zenn.dev${article.path}`,
+        liked_count: article.liked_count,
+        updated_at: article.body_updated_at,
+        platform: "Zenn" as const,
+      }));
+      unifiedArticles.push(...zennArticles);
     }
-    const zennData: ZennApiResponse = await response.json();
-    return data({ articles: zennData.articles });
+
+    // Process Qiita articles
+    if (qiitaResponse.ok) {
+      const qiitaData: QiitaArticle[] = await qiitaResponse.json();
+      const qiitaArticles: UnifiedArticle[] = qiitaData.map((article) => ({
+        id: `qiita-${article.id}`,
+        title: article.title,
+        url: article.url,
+        liked_count: article.likes_count,
+        updated_at: article.updated_at,
+        platform: "Qiita" as const,
+      }));
+      unifiedArticles.push(...qiitaArticles);
+    }
+
+    // Process Note articles
+    if (noteResponse.ok) {
+      const noteData: NoteApiResponse = await noteResponse.json();
+      const noteArticles: UnifiedArticle[] = noteData.data.contents.map((content) => ({
+        id: `note-${content.id}`,
+        title: content.name,
+        url: content.note_url,
+        liked_count: content.like_count,
+        updated_at: content.updated_at,
+        platform: "Note" as const,
+      }));
+      unifiedArticles.push(...noteArticles);
+    }
+
+    return data({ articles: unifiedArticles });
   } catch (error) {
     console.error("Error fetching articles:", error);
     return data({ articles: [] });
@@ -101,7 +220,7 @@ export default function Articles() {
       return b.liked_count - a.liked_count;
     }
     // Default: sort by update date (latest first)
-    return new Date(b.body_updated_at).getTime() - new Date(a.body_updated_at).getTime();
+    return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
   });
 
   const formatDate = (dateString: string) => {
@@ -110,6 +229,19 @@ export default function Articles() {
       month: "numeric",
       day: "numeric",
     });
+  };
+
+  const getPlatformColor = (platform: "Zenn" | "Qiita" | "Note") => {
+    switch (platform) {
+      case "Zenn":
+        return "bg-blue-100 text-blue-800";
+      case "Qiita":
+        return "bg-green-100 text-green-800";
+      case "Note":
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
   return (
@@ -170,12 +302,12 @@ export default function Articles() {
                   <div className="flex items-start justify-between mb-2">
                     <Badge
                       variant="secondary"
-                      className="bg-blue-100 text-blue-800"
+                      className={getPlatformColor(article.platform)}
                     >
-                      Zenn
+                      {article.platform}
                     </Badge>
                     <a
-                      href={`https://zenn.dev${article.path}`}
+                      href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-1 hover:bg-gray-100 rounded transition-colors"
@@ -185,7 +317,7 @@ export default function Articles() {
                   </div>
                   <CardTitle className="text-xl leading-tight">
                     <a
-                      href={`https://zenn.dev${article.path}`}
+                      href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="hover:text-blue-600 transition-colors"
@@ -199,7 +331,7 @@ export default function Articles() {
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        <span>{formatDate(article.body_updated_at)}</span>
+                        <span>{formatDate(article.updated_at)}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Heart className="h-4 w-4" />
@@ -229,22 +361,52 @@ export default function Articles() {
             </h2>
             <p className="text-gray-600 mb-8">
               最新の技術記事やブログ投稿をお見逃しなく。
-              Zennでフォローして、新しい記事の通知を受け取りましょう。
+              各プラットフォームでフォローして、新しい記事の通知を受け取りましょう。
             </p>
-            <Button
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700"
-              asChild
-            >
-              <a
-                href="https://zenn.dev/yuji207"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700"
+                asChild
               >
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Follow on Zenn
-              </a>
-            </Button>
+                <a
+                  href="https://zenn.dev/yuji207"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Follow on Zenn
+                </a>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+              >
+                <a
+                  href="https://qiita.com/yjn279"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Follow on Qiita
+                </a>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+              >
+                <a
+                  href="https://note.com/yjn279"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Follow on Note
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
