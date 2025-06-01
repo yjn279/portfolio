@@ -29,15 +29,21 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "Bash(pnpm check:fix),Bash(pnpm build)"
+          allowed_tools: "Bash(biome ci .)"
           assignee_trigger: "claude"
   
   quality:
+    needs: claude
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
