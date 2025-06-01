@@ -17,10 +17,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  BadgeCheck,
   BookOpen,
   Calendar,
+  Clock,
   ExternalLink,
+  Filter,
   Heart,
+  MapPin,
+  Plane,
   SortDesc,
 } from "lucide-react";
 import { useState } from "react";
@@ -106,17 +111,20 @@ interface QiitaArticle {
   page_views_count?: number;
 }
 
-// Note API response types (estimated structure)
+// Note API response types (updated based on user feedback)
 interface NoteContent {
-  id: string;
+  id: number;
+  type: string;
+  status: string;
   name: string;
+  description?: string;
+  likeCount: number; // Updated: correct field name
   user: {
     urlname: string;
     nickname: string;
   };
-  publish_at: string;
+  publish_at?: string;
   updated_at: string;
-  like_count: number;
   note_url: string;
 }
 
@@ -137,6 +145,7 @@ interface UnifiedArticle {
 }
 
 type SortOption = "latest" | "likes";
+type PlatformType = "Zenn" | "Qiita" | "Note";
 
 export async function loader({ request }: Route.LoaderArgs) {
   try {
@@ -144,7 +153,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const [zennResponse, qiitaResponse, noteResponse] = await Promise.all([
       fetch("https://zenn.dev/api/articles?username=yuji207"),
       fetch("https://qiita.com/api/v2/users/yjn279/items?per_page=100"),
-      fetch("https://note.com/api/v2/creators/yjn279/contents?kind=note")
+      fetch("https://note.com/api/v2/creators/yjn279/contents?kind=note"),
     ]);
 
     const unifiedArticles: UnifiedArticle[] = [];
@@ -152,14 +161,16 @@ export async function loader({ request }: Route.LoaderArgs) {
     // Process Zenn articles
     if (zennResponse.ok) {
       const zennData: ZennApiResponse = await zennResponse.json();
-      const zennArticles: UnifiedArticle[] = zennData.articles.map((article) => ({
-        id: `zenn-${article.id}`,
-        title: article.title,
-        url: `https://zenn.dev${article.path}`,
-        liked_count: article.liked_count,
-        updated_at: article.body_updated_at,
-        platform: "Zenn" as const,
-      }));
+      const zennArticles: UnifiedArticle[] = zennData.articles.map(
+        (article) => ({
+          id: `zenn-${article.id}`,
+          title: article.title,
+          url: `https://zenn.dev${article.path}`,
+          liked_count: article.liked_count,
+          updated_at: article.body_updated_at,
+          platform: "Zenn" as const,
+        }),
+      );
       unifiedArticles.push(...zennArticles);
     }
 
@@ -177,17 +188,19 @@ export async function loader({ request }: Route.LoaderArgs) {
       unifiedArticles.push(...qiitaArticles);
     }
 
-    // Process Note articles
+    // Process Note articles (updated field access)
     if (noteResponse.ok) {
       const noteData: NoteApiResponse = await noteResponse.json();
-      const noteArticles: UnifiedArticle[] = noteData.data.contents.map((content) => ({
-        id: `note-${content.id}`,
-        title: content.name,
-        url: content.note_url,
-        liked_count: content.like_count,
-        updated_at: content.updated_at,
-        platform: "Note" as const,
-      }));
+      const noteArticles: UnifiedArticle[] = noteData.data.contents.map(
+        (content) => ({
+          id: `note-${content.id}`,
+          title: content.name,
+          url: content.note_url,
+          liked_count: content.likeCount, // Updated: correct field name
+          updated_at: content.updated_at,
+          platform: "Note" as const,
+        }),
+      );
       unifiedArticles.push(...noteArticles);
     }
 
@@ -200,11 +213,11 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export function meta(_: Route.MetaArgs) {
   return [
-    { title: "Articles - Flight YJN279" },
+    { title: "Briefing Room - Flight YJN279" },
     {
       name: "description",
       content:
-        "YJN279の技術記事・ブログ一覧。Web開発、React、TypeScript、パフォーマンス最適化などの技術情報を発信しています。",
+        "Flight YJN279 のブリーフィングルーム。技術記事、思考の記録、開発の知見をお届けします。",
     },
   ];
 }
@@ -213,9 +226,19 @@ export default function Articles() {
   const { articles } = useLoaderData<typeof loader>();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("latest");
+  const [selectedPlatforms, setSelectedPlatforms] = useState<PlatformType[]>(
+    [],
+  );
+
+  // Filter articles based on selected platforms
+  const filteredArticles = articles.filter((article) => {
+    // 何も選択されていない場合は全て表示
+    if (selectedPlatforms.length === 0) return true;
+    return selectedPlatforms.includes(article.platform);
+  });
 
   // Sort articles based on selected option
-  const sortedArticles = [...articles].sort((a, b) => {
+  const sortedArticles = [...filteredArticles].sort((a, b) => {
     if (sortBy === "likes") {
       return b.liked_count - a.liked_count;
     }
@@ -234,37 +257,90 @@ export default function Articles() {
   const getPlatformColor = (platform: "Zenn" | "Qiita" | "Note") => {
     switch (platform) {
       case "Zenn":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-500 text-white";
       case "Qiita":
-        return "bg-green-100 text-green-800";
+        return "bg-green-500 text-white";
       case "Note":
-        return "bg-purple-100 text-purple-800";
+        return "bg-amber-500 text-white";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-slate-500 text-white";
+    }
+  };
+
+  const getPlatformStats = () => {
+    const stats = {
+      Zenn: articles.filter((a) => a.platform === "Zenn").length,
+      Qiita: articles.filter((a) => a.platform === "Qiita").length,
+      Note: articles.filter((a) => a.platform === "Note").length,
+    };
+    return stats;
+  };
+
+  const platformStats = getPlatformStats();
+
+  const togglePlatform = (platform: PlatformType) => {
+    setSelectedPlatforms((prev) => {
+      if (prev.includes(platform)) {
+        return prev.filter((p) => p !== platform);
+      }
+      return [...prev, platform];
+    });
+  };
+
+  const getFilterBadgeStyle = (platform: PlatformType) => {
+    const isSelected = selectedPlatforms.includes(platform);
+
+    switch (platform) {
+      case "Zenn":
+        return isSelected
+          ? "bg-blue-500 text-white cursor-pointer transition-colors hover:bg-blue-600"
+          : "bg-blue-50 text-blue-600 border border-blue-200 cursor-pointer transition-colors hover:bg-blue-100";
+      case "Qiita":
+        return isSelected
+          ? "bg-green-500 text-white cursor-pointer transition-colors hover:bg-green-600"
+          : "bg-green-50 text-green-600 border border-green-200 cursor-pointer transition-colors hover:bg-green-100";
+      case "Note":
+        return isSelected
+          ? "bg-amber-500 text-white cursor-pointer transition-colors hover:bg-amber-600"
+          : "bg-amber-50 text-amber-600 border border-amber-200 cursor-pointer transition-colors hover:bg-amber-100";
+      default:
+        return "bg-gray-50 text-gray-600 border border-gray-200 cursor-pointer transition-colors hover:bg-gray-100";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
       <Header
         showBackButton={true}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
-      {/* Hero Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <BookOpen className="h-4 w-4" />
-            Briefing Room
+      {/* Hero Section - Flight Briefing Style */}
+      <section className="relative py-16 px-4 bg-white overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 text-blue-600">
+            <Plane className="h-32 w-32 rotate-45" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Technical Articles
+          <div className="absolute bottom-10 right-10 text-blue-600">
+            <Plane className="h-24 w-24 -rotate-12" />
+          </div>
+          <div className="absolute top-1/2 left-1/4 text-blue-600">
+            <Plane className="h-16 w-16 rotate-12" />
+          </div>
+        </div>
+
+        <div className="relative container mx-auto text-center">
+          <div className="inline-flex items-center gap-3 bg-blue-600 text-white px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-lg">
+            <BookOpen className="h-4 w-4" />
+            <span className="tracking-wide">BRIEFING ROOM</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 tracking-tight">
+            Knowledge
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Web開発、React、TypeScript、パフォーマンス最適化などの技術情報を発信しています。
-            実践的な知見と経験を共有し、開発者コミュニティに貢献することを目指しています。
+          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+            技術記事、思考の記録、開発の知見を共有するブリーフィングルーム
           </p>
         </div>
       </section>
@@ -272,70 +348,137 @@ export default function Articles() {
       {/* Articles Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
-          {/* Sort Controls */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">
-              Articles ({articles.length})
+          {/* Flight Control Panel */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              <MapPin className="h-8 w-8 text-blue-600" />
+              Article Archives
             </h2>
-            <div className="flex items-center gap-2">
-              <SortDesc className="h-4 w-4 text-gray-500" />
-              <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="並び順" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="latest">更新日順</SelectItem>
-                  <SelectItem value="likes">いいね順</SelectItem>
-                </SelectContent>
-              </Select>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+              {/* Platform Filter */}
+              <div className="flex flex-wrap items-center gap-3">
+                <Filter className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium text-gray-600">
+                  Filter by:
+                </span>
+                <Badge
+                  className={getFilterBadgeStyle("Zenn")}
+                  onClick={() => togglePlatform("Zenn")}
+                >
+                  {selectedPlatforms.includes("Zenn") && (
+                    <BadgeCheck className="h-3 w-3 mr-1" />
+                  )}
+                  Zenn
+                </Badge>
+                <Badge
+                  className={getFilterBadgeStyle("Qiita")}
+                  onClick={() => togglePlatform("Qiita")}
+                >
+                  {selectedPlatforms.includes("Qiita") && (
+                    <BadgeCheck className="h-3 w-3 mr-1" />
+                  )}
+                  Qiita
+                </Badge>
+                <Badge
+                  className={getFilterBadgeStyle("Note")}
+                  onClick={() => togglePlatform("Note")}
+                >
+                  {selectedPlatforms.includes("Note") && (
+                    <BadgeCheck className="h-3 w-3 mr-1" />
+                  )}
+                  Note
+                </Badge>
+              </div>
+
+              {/* Sort */}
+              <div className="flex items-center gap-3">
+                <SortDesc className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium text-gray-600">
+                  Sort by:
+                </span>
+                <Select
+                  value={sortBy}
+                  onValueChange={(value: SortOption) => setSortBy(value)}
+                >
+                  <SelectTrigger className="w-[140px] text-sm border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                    <SelectValue placeholder="並び順" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="latest">Latest First</SelectItem>
+                    <SelectItem value="likes">Most Popular</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
-          {/* Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedArticles.map((article) => (
+          {/* Boarding Pass Style Articles Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {sortedArticles.map((article, index) => (
               <Card
                 key={article.id}
-                className="hover:shadow-xl transition-all duration-300 border-2 hover:border-blue-200"
+                className="group hover:shadow-2xl transition-all duration-500 border-2 border-blue-100 bg-white hover:border-blue-300 hover:-translate-y-1 overflow-hidden"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
+                {/* Boarding Pass Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4">
+                  <div className="flex items-center justify-between mb-2">
                     <Badge
-                      variant="secondary"
-                      className={getPlatformColor(article.platform)}
+                      className={`${getPlatformColor(article.platform)} font-medium px-3 py-1 text-xs`}
                     >
                       {article.platform}
                     </Badge>
+                    <div className="flex items-center gap-2 text-blue-100">
+                      <Clock className="h-3 w-3" />
+                      <span className="text-xs font-mono">
+                        {formatDate(article.updated_at)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-xs font-mono text-blue-100">
+                      FLIGHT YJN279
+                    </div>
                     <a
                       href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1 hover:bg-gray-100 rounded transition-colors"
+                      className="p-2 hover:bg-blue-500 rounded-lg transition-colors group/link"
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4 group-hover/link:scale-110 transition-transform" />
                     </a>
                   </div>
-                  <CardTitle className="text-xl leading-tight">
+                </div>
+
+                {/* Article Content */}
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg leading-tight text-gray-900 group-hover:text-blue-700 transition-colors">
                     <a
                       href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:text-blue-600 transition-colors"
+                      className="hover:underline decoration-2 underline-offset-2 decoration-blue-400"
                     >
                       {article.title}
                     </a>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        <span>{formatDate(article.updated_at)}</span>
+
+                {/* Boarding Pass Footer */}
+                <CardContent className="pt-0">
+                  <div className="border-t border-dashed border-gray-200 pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <span className="text-xs font-mono uppercase tracking-wide">
+                          Passenger Rating
+                        </span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Heart className="h-4 w-4" />
-                        <span>{article.liked_count}</span>
+                      <div className="flex items-center gap-2 bg-red-50 text-red-600 px-3 py-1 rounded-full">
+                        <Heart className="h-3 w-3 fill-current" />
+                        <span className="font-bold text-sm">
+                          {article.liked_count}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -344,29 +487,37 @@ export default function Articles() {
             ))}
           </div>
 
-          {articles.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-gray-500 text-lg">記事が見つかりませんでした。</p>
+          {filteredArticles.length === 0 && (
+            <div className="text-center py-20">
+              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Plane className="h-12 w-12 text-blue-600" />
+              </div>
+              <p className="text-gray-500 text-lg">
+                No flights scheduled at this time
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                Please check back later for updates
+              </p>
             </div>
           )}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-white">
+      {/* CTA Section - Final Boarding Call */}
+      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="container mx-auto text-center">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Stay Updated
-            </h2>
-            <p className="text-gray-600 mb-8">
-              最新の技術記事やブログ投稿をお見逃しなく。
-              各プラットフォームでフォローして、新しい記事の通知を受け取りましょう。
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Plane className="h-8 w-8" />
+              <h2 className="text-4xl font-bold">Final Boarding Call</h2>
+            </div>
+            <p className="text-xl text-blue-100 mb-12">
+              最新のフライト情報や技術記事をお見逃しなく。お好みのプラットフォームでフォローして、新しい知見の旅にご参加ください。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-3 font-semibold"
                 asChild
               >
                 <a
@@ -375,12 +526,12 @@ export default function Articles() {
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  Follow on Zenn
+                  Board Zenn Flight
                 </a>
               </Button>
               <Button
-                variant="outline"
                 size="lg"
+                className="bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-3 font-semibold"
                 asChild
               >
                 <a
@@ -389,12 +540,12 @@ export default function Articles() {
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  Follow on Qiita
+                  Board Qiita Flight
                 </a>
               </Button>
               <Button
-                variant="outline"
                 size="lg"
+                className="bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-3 font-semibold"
                 asChild
               >
                 <a
@@ -403,7 +554,7 @@ export default function Articles() {
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  Follow on Note
+                  Board Note Flight
                 </a>
               </Button>
             </div>
