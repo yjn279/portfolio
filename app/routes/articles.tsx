@@ -10,7 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getFeaturedArticles, getOtherArticles } from "@/data/articles";
-import type { Article } from "@/types";
+import { useArticles, filterArticles } from "@/hooks/useArticles";
+import type { Article, ApiError } from "@/types";
 import {
   ArrowLeft,
   BookOpen,
@@ -20,8 +21,11 @@ import {
   Eye,
   Heart,
   Plane,
+  RefreshCw,
+  AlertCircle,
 } from "lucide-react";
 import { Link } from "react-router";
+import { useState, useMemo } from "react";
 import type { Route } from "./+types/articles";
 
 export function meta(_: Route.MetaArgs) {
@@ -35,9 +39,63 @@ export function meta(_: Route.MetaArgs) {
   ];
 }
 
+function ErrorDisplay({ errors, onRetry }: { errors: ApiError[]; onRetry: () => void }) {
+  if (errors.length === 0) return null;
+
+  return (
+    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div className="flex items-center gap-2 mb-2">
+        <AlertCircle className="h-5 w-5 text-red-600" />
+        <h3 className="font-medium text-red-800">記事の取得エラー</h3>
+      </div>
+      <div className="space-y-1 mb-3">
+        {errors.map((error, index) => (
+          <p key={index} className="text-sm text-red-700">
+            {error.platform}: {error.message}
+          </p>
+        ))}
+      </div>
+      <Button
+        onClick={onRetry}
+        size="sm"
+        variant="outline"
+        className="border-red-300 text-red-700 hover:bg-red-100"
+      >
+        <RefreshCw className="h-4 w-4 mr-2" />
+        再試行
+      </Button>
+    </div>
+  );
+}
+
 export default function Articles() {
-  const featuredArticles = getFeaturedArticles();
-  const otherArticles = getOtherArticles();
+  const [showApiArticles, setShowApiArticles] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
+  
+  // 静的記事データ
+  const staticFeaturedArticles = getFeaturedArticles();
+  const staticOtherArticles = getOtherArticles();
+  
+  // API記事データ
+  const { articles: apiArticles, loading, errors, refetch } = useArticles({
+    autoFetch: showApiArticles
+  });
+  
+  // 記事の統合とフィルタリング
+  const { featuredArticles, otherArticles } = useMemo(() => {
+    let allArticles = showApiArticles ? apiArticles : [...staticFeaturedArticles, ...staticOtherArticles];
+    
+    // プラットフォームフィルタリング
+    if (selectedPlatform !== "all") {
+      allArticles = filterArticles(allArticles, { platform: selectedPlatform });
+    }
+    
+    // 注目記事と通常記事に分離
+    const featured = allArticles.filter(article => article.featured);
+    const other = allArticles.filter(article => !article.featured);
+    
+    return { featuredArticles: featured, otherArticles: other };
+  }, [showApiArticles, apiArticles, staticFeaturedArticles, staticOtherArticles, selectedPlatform]);
 
   const getPlatformColor = (platform: string) => {
     switch (platform) {
@@ -45,6 +103,8 @@ export default function Articles() {
         return "bg-blue-100 text-blue-800";
       case "Qiita":
         return "bg-green-100 text-green-800";
+      case "Note":
+        return "bg-purple-100 text-purple-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -64,20 +124,96 @@ export default function Articles() {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Technical Articles
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
             Web開発、React、TypeScript、パフォーマンス最適化などの技術情報を発信しています。
             実践的な知見と経験を共有し、開発者コミュニティに貢献することを目指しています。
           </p>
+
+          {/* Controls */}
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                {/* Article Source Toggle */}
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-medium text-gray-700">記事ソース:</span>
+                  <div className="flex bg-white rounded-lg p-1 border">
+                    <button
+                      onClick={() => setShowApiArticles(false)}
+                      className={`px-3 py-2 text-sm rounded transition-colors ${
+                        !showApiArticles
+                          ? "bg-blue-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                    >
+                      静的記事
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowApiArticles(true);
+                        if (apiArticles.length === 0) refetch();
+                      }}
+                      className={`px-3 py-2 text-sm rounded transition-colors ${
+                        showApiArticles
+                          ? "bg-blue-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                    >
+                      API記事
+                      {loading && <RefreshCw className="ml-2 h-3 w-3 animate-spin inline" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Platform Filter */}
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-medium text-gray-700">プラットフォーム:</span>
+                  <select
+                    value={selectedPlatform}
+                    onChange={(e) => setSelectedPlatform(e.target.value)}
+                    className="px-3 py-2 border rounded-lg text-sm bg-white"
+                  >
+                    <option value="all">すべて</option>
+                    <option value="Zenn">Zenn</option>
+                    <option value="Qiita">Qiita</option>
+                    <option value="Note">Note</option>
+                  </select>
+                </div>
+
+                {/* Refresh Button for API articles */}
+                {showApiArticles && (
+                  <Button
+                    onClick={refetch}
+                    size="sm"
+                    variant="outline"
+                    disabled={loading}
+                  >
+                    <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+                    更新
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* Error Display */}
+      {showApiArticles && errors.length > 0 && (
+        <section className="px-4">
+          <div className="container mx-auto">
+            <ErrorDisplay errors={errors} onRetry={refetch} />
+          </div>
+        </section>
+      )}
+
       {/* Featured Articles */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Featured Articles
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      {featuredArticles.length > 0 && (
+        <section className="py-16 px-4">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              {showApiArticles ? "注目記事" : "Featured Articles"}
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {featuredArticles.map((article) => (
               <Card
                 key={article.id}
@@ -148,17 +284,19 @@ export default function Articles() {
                 </CardContent>
               </Card>
             ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Other Articles */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Other Articles
-          </h2>
-          <div className="space-y-6 max-w-4xl mx-auto">
+      {otherArticles.length > 0 && (
+        <section className="py-16 px-4 bg-white">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              {showApiArticles ? "その他の記事" : "Other Articles"}
+            </h2>
+            <div className="space-y-6 max-w-4xl mx-auto">
             {otherArticles.map((article) => (
               <Card
                 key={article.id}
@@ -232,9 +370,29 @@ export default function Articles() {
                 </CardContent>
               </Card>
             ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* No Articles Message */}
+      {showApiArticles && featuredArticles.length === 0 && otherArticles.length === 0 && !loading && (
+        <section className="py-16 px-4">
+          <div className="container mx-auto text-center">
+            <div className="max-w-md mx-auto">
+              <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">記事が見つかりません</h3>
+              <p className="text-gray-500 mb-4">
+                選択したプラットフォームに記事がないか、APIエラーが発生している可能性があります。
+              </p>
+              <Button onClick={refetch} variant="outline">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                再読み込み
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-16 px-4">

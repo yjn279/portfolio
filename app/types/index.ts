@@ -70,3 +70,92 @@ export interface SkillCategory {
   cloud: string[];
   tools: string[];
 }
+
+// API関連の型定義
+export interface ZennArticleResponse {
+  articles: ZennArticle[];
+  next_page?: number | null;
+}
+
+export interface ZennArticle {
+  id: number;
+  title: string;
+  slug: string;
+  published_at: string;
+  path: string;
+  body_letters_count: number;
+  article_type: "tech" | "idea";
+  emoji: string;
+  is_suspending_private: boolean;
+  published_at_time_ago: string;
+  reading_time: number;
+  source_repo_updated_at?: string | null;
+  pinned: boolean;
+  comments_count: number;
+  liked_count: number;
+  body_updated_at?: string | null;
+  post_type: "Article";
+  publication?: {
+    id: number;
+    name: string;
+    avatar_small_url: string;
+    pro: boolean;
+  } | null;
+  user: {
+    id: number;
+    username: string;
+    name: string;
+    avatar_small_url: string;
+  };
+  tags: Array<{
+    id: number;
+    name: string;
+    taggings_count: number;
+  }>;
+}
+
+export interface QiitaItem {
+  rendered_body: string;
+  body: string;
+  coediting: boolean;
+  comments_count: number;
+  created_at: string;
+  group: any;
+  id: string;
+  likes_count: number;
+  private: boolean;
+  reactions_count: number;
+  stocks_count: number;
+  tags: Array<{
+    name: string;
+    versions: string[];
+  }>;
+  title: string;
+  updated_at: string;
+  url: string;
+  user: {
+    description: string;
+    facebook_id: string;
+    followees_count: number;
+    followers_count: number;
+    github_login_name: string;
+    id: string;
+    items_count: number;
+    linkedin_id: string;
+    location: string;
+    name: string;
+    organization: string;
+    permanent_id: number;
+    profile_image_url: string;
+    team_only: boolean;
+    twitter_screen_name: string;
+    website_url: string;
+  };
+  page_views_count: number;
+}
+
+export interface ApiError {
+  message: string;
+  status?: number;
+  platform: "Zenn" | "Qiita" | "Note";
+}
