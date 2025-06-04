@@ -1,13 +1,13 @@
-import { FloatingContactButton } from "@/components/FloatingContactButton";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { MobileMenu } from "@/components/layout/MobileMenu";
-import { ArticlesSection } from "@/components/sections/ArticlesSection";
-import { ContactSection } from "@/components/sections/ContactSection";
-import { ExperienceSection } from "@/components/sections/ExperienceSection";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { ProjectsSection } from "@/components/sections/ProjectsSection";
-import { useMobileMenu } from "@/hooks/useMobileMenu";
+import { FloatingContactButton } from "@/components/floating-contact-button";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+import { MobileMenu } from "@/components/layout/mobile-menu";
+import { ArticlesSection } from "@/components/sections/articles-section";
+import { ContactSection } from "@/components/sections/contact-section";
+import { ExperienceSection } from "@/components/sections/experience-section";
+import { HeroSection } from "@/components/sections/hero-section";
+import { ProjectsSection } from "@/components/sections/projects-section";
+import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import type { Route } from "./+types/home";
 
 export function meta(_: Route.MetaArgs) {

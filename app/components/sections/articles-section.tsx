@@ -1,8 +1,10 @@
+import { ArticleList } from "@/components/articles/article-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { articles } from "@/data/articles";
-import type { Article } from "@/types";
+import { useArticles } from "@/hooks/use-articles";
+import type { Article } from "@/types/article.types";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Link } from "react-router";
 

@@ -1,5 +1,6 @@
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { ArticleList } from "@/components/articles/article-list";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useArticles } from "@/hooks/use-articles";
+import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import {
   BadgeCheck,
   BookOpen,
@@ -138,6 +141,7 @@ interface NoteApiResponse {
 interface MicrolinkApiResponse {
   data?: {
     description?: string;
+    date?: string;
   };
 }
 
@@ -321,26 +325,34 @@ export default function Articles() {
 
   // Microlink description cache
   const [descriptions, setDescriptions] = useState<Record<string, string>>({});
+  const [noteDates, setNoteDates] = useState<Record<string, string>>({});
   const [loadingDesc, setLoadingDesc] = useState<Record<string, boolean>>({});
   const [errorDesc, setErrorDesc] = useState<Record<string, boolean>>({});
 
   // Fetch description for a given article URL
-  const fetchDescription = useCallback(async (id: string, url: string) => {
-    setLoadingDesc((prev) => ({ ...prev, [id]: true }));
-    setErrorDesc((prev) => ({ ...prev, [id]: false }));
-    try {
-      const res = await fetch(
-        `https://api.microlink.io/?url=${encodeURIComponent(url)}`,
-      );
-      const data: MicrolinkApiResponse = await res.json();
-      const desc = data?.data?.description || "";
-      setDescriptions((prev) => ({ ...prev, [id]: desc }));
-    } catch (e) {
-      setErrorDesc((prev) => ({ ...prev, [id]: true }));
-    } finally {
-      setLoadingDesc((prev) => ({ ...prev, [id]: false }));
-    }
-  }, []);
+  const fetchDescription = useCallback(
+    async (id: string, url: string, platform: string) => {
+      setLoadingDesc((prev) => ({ ...prev, [id]: true }));
+      setErrorDesc((prev) => ({ ...prev, [id]: false }));
+      try {
+        const res = await fetch(
+          `https://api.microlink.io/?url=${encodeURIComponent(url)}`,
+        );
+        const data: MicrolinkApiResponse = await res.json();
+        const desc = data?.data?.description || "";
+        setDescriptions((prev) => ({ ...prev, [id]: desc }));
+        // Note記事の場合はdateも保存
+        if (platform === "Note" && data?.data?.date) {
+          setNoteDates((prev) => ({ ...prev, [id]: data.data?.date || "" }));
+        }
+      } catch (e) {
+        setErrorDesc((prev) => ({ ...prev, [id]: true }));
+      } finally {
+        setLoadingDesc((prev) => ({ ...prev, [id]: false }));
+      }
+    },
+    [],
+  );
 
   // Prefetch descriptions for visible articles
   useEffect(() => {
@@ -350,15 +362,26 @@ export default function Articles() {
         !loadingDesc[article.id] &&
         !errorDesc[article.id]
       ) {
-        fetchDescription(article.id, article.url);
+        fetchDescription(article.id, article.url, article.platform);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortedArticles, descriptions, loadingDesc, errorDesc, fetchDescription]);
 
   // Helper to get created date for any article
-  const getCreatedAt = (article: UnifiedArticle) =>
-    article.created_at || article.updated_at;
+  const getCreatedAt = (article: UnifiedArticle) => {
+    if (article.platform === "Note" && noteDates[article.id]) {
+      return noteDates[article.id];
+    }
+    return article.created_at || article.updated_at;
+  };
+
+  // Helper to format date as YYYY年M月D日
+  const formatJapaneseDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
@@ -478,7 +501,7 @@ export default function Articles() {
               >
                 <Card className="border-0 shadow-none bg-transparent p-0">
                   {/* ヘッダー（右側の外部リンクアイコンは削除） */}
-                  <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2"></CardHeader>
+                  <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2" />
                   {/* 記事タイトル・description・いいね数＋日付 */}
                   <CardHeader className="pt-0 pb-3">
                     <CardTitle className="text-lg leading-tight text-gray-900 group-hover:text-blue-700 transition-colors flex items-center gap-2">
@@ -514,7 +537,7 @@ export default function Articles() {
                       </button>
                     </CardTitle>
                     {/* Description from Microlink */}
-                    <div className="mt-2 text-gray-600 text-sm min-h-[2em]">
+                    <div className="mt-2 text-gray-600 text-sm min-h-[2em] line-clamp-2">
                       {loadingDesc[article.id] && <span>Loading...</span>}
                       {errorDesc[article.id] && (
                         <span className="text-red-400">取得失敗</span>
@@ -539,10 +562,7 @@ export default function Articles() {
                         </span>
                       </span>
                       <span>
-                        Created at {formatDate(getCreatedAt(article))}
-                      </span>
-                      <span>
-                        Updated at {formatDate(article.updated_at)}
+                        作成日: {formatJapaneseDate(getCreatedAt(article))}
                       </span>
                     </div>
                   </CardHeader>

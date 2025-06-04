@@ -13,21 +13,6 @@ export interface Project {
   featured?: boolean;
 }
 
-export interface Article {
-  id: string;
-  title: string;
-  description: string;
-  excerpt?: string;
-  tags: string[];
-  url: string;
-  publishedAt: string;
-  readTime?: string;
-  views?: string;
-  likes?: string;
-  platform?: string;
-  featured?: boolean;
-}
-
 export interface Experience {
   id: string;
   company: string;
