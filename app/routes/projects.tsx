@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getFeaturedProjects, getOtherProjects } from "@/data/projects";
+import { getFeaturedProjects, getOtherProjects, projects } from "@/data/projects";
 import {
   ArrowLeft,
   Calendar,
@@ -22,6 +22,9 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/projects";
+import { drizzle } from "drizzle-orm/d1";
+import { env } from "cloudflare:workers";
+import * as schema from "../../database/schema";
 
 export function meta(_: Route.MetaArgs) {
   return [
@@ -32,6 +35,12 @@ export function meta(_: Route.MetaArgs) {
         "YJN279の開発プロジェクト一覧。フルスタックWebエンジニアとして手がけたプロダクトやアプリケーションをご紹介します。",
     },
   ];
+}
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const db = drizzle(env.DB);
+  const result = await db.select().from(schema.projects).all();
+  return Response.json(result);
 }
 
 export default function Projects() {
