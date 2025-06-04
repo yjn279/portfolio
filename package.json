@@ -3,19 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "cf-typegen": "wrangler types",
-    "deploy": "pnpm run build && wrangler deploy",
     "dev": "react-router dev",
-    "lint": "biome lint .",
-    "lint:fix": "biome lint --write .",
-    "format": "biome format .",
-    "format:fix": "biome format --write .",
-    "check": "biome check .",
-    "check:fix": "biome check --write .",
-    "postinstall": "pnpm run cf-typegen",
-    "preview": "pnpm run build && vite preview",
-    "typecheck": "pnpm run cf-typegen && react-router typegen && tsc -b"
+    "build": "react-router build",
+    "check": "biome check --write .",
+    "typecheck": "pnpm run cf-typegen && react-router typegen && tsc -b",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply --local portfolio",
+    "db:migrate-production": "wrangler d1 migrations apply --remote portfolio",
+    "seed": "wrangler d1 execute portfolio --local --file=database/seed.sql"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
