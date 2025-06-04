@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getFeaturedProjects, getOtherProjects, projects } from "@/data/projects";
+import {
+  getFeaturedProjects,
+  getOtherProjects,
+  projects,
+} from "@/data/projects";
+import { drizzle } from "drizzle-orm/d1";
 import {
   ArrowLeft,
   Calendar,
@@ -21,10 +27,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
-import type { Route } from "./+types/projects";
-import { drizzle } from "drizzle-orm/d1";
-import { env } from "cloudflare:workers";
 import * as schema from "../../database/schema";
+import type { Route } from "./+types/projects";
 
 export function meta(_: Route.MetaArgs) {
   return [
