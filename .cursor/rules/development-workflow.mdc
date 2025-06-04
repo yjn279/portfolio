@@ -32,6 +32,9 @@ pnpm run deploy
 
 # shadcn/uiコンポーネント追加
 pnpm dlx shadcn@latest add [コンポーネント名]
+
+# Applying changes to the database
+pnpm drizzle-kit push
 ```
 
 ## Gitワークフロー
