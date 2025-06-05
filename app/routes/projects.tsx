@@ -15,6 +15,7 @@ import {
   getOtherProjects,
   projects,
 } from "@/data/projects";
+import type { Project } from "@/types";
 import { drizzle } from "drizzle-orm/d1";
 import {
   ArrowLeft,
@@ -29,7 +30,6 @@ import { useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import * as schema from "../../database/schema";
 import type { Route } from "./+types/projects";
-import type { Project } from "@/types";
 
 export function meta(_: Route.MetaArgs) {
   return [
@@ -61,14 +61,16 @@ export async function loader({ request }: Route.LoaderArgs) {
     title: row.title,
     description: row.description,
     longDescription: row.description,
-    tags: typeof row.tags === 'string' ? JSON.parse(row.tags) : row.tags,
+    tags: typeof row.tags === "string" ? JSON.parse(row.tags) : row.tags,
     links: linksByProject[String(row.id)] || [],
   }));
 }
 
 export default function Projects() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const projects = useLoaderData() as Array<Project & { links: { url: string; media: string }[] }>;
+  const projects = useLoaderData() as Array<
+    Project & { links: { url: string; media: string }[] }
+  >;
 
   // media名→アイコンコンポーネント
   const mediaIcon = {
@@ -112,7 +114,10 @@ export default function Projects() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <Card key={project.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={project.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <CardTitle className="text-xl">{project.title}</CardTitle>
                   <CardDescription>{project.longDescription}</CardDescription>
@@ -127,9 +132,17 @@ export default function Projects() {
                   </div>
                   <div className="flex gap-2">
                     {project.links.map((link) => {
-                      const Icon = mediaIcon[link.media as keyof typeof mediaIcon] || ExternalLink;
+                      const Icon =
+                        mediaIcon[link.media as keyof typeof mediaIcon] ||
+                        ExternalLink;
                       return (
-                        <a key={link.url} href={link.url} className="p-1 hover:bg-gray-100 rounded" target="_blank" rel="noopener noreferrer">
+                        <a
+                          key={link.url}
+                          href={link.url}
+                          className="p-1 hover:bg-gray-100 rounded"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <Icon className="h-4 w-4" />
                         </a>
                       );
