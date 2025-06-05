@@ -1,5 +1,3 @@
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +33,6 @@ import {
   Plane,
   Twitter,
 } from "lucide-react";
-import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/profile";
 
@@ -51,16 +48,8 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export default function Profile() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header
-        showBackButton={true}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
-
+    <>
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
@@ -500,21 +489,21 @@ export default function Profile() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Contact CTA */}
       <section className="py-16 px-4">
-        <div className="container mx-auto text-center">
-          <div className="max-w-2xl mx-auto">
+        <div className="container mx-auto">
+          <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Let's Connect
+              Ready for Flight YJN279?
             </h2>
             <p className="text-gray-600 mb-8">
-              新しいプロジェクトやコラボレーションの機会をお待ちしています。
-              お気軽にお声がけください。
+              新しいプロジェクトや協業の機会についてお気軽にご相談ください。
+              一緒に素晴らしいプロダクトを作り上げましょう。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
                 <Mail className="h-4 w-4 mr-2" />
-                Contact YJN279
+                Get in Touch
               </Button>
               <Link to="/">
                 <Button variant="outline" size="lg">
@@ -526,8 +515,6 @@ export default function Profile() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

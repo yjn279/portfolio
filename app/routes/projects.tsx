@@ -1,6 +1,4 @@
 import { env } from "cloudflare:workers";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +24,6 @@ import {
   Star,
   Users,
 } from "lucide-react";
-import { useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import * as schema from "../../database/schema";
 import type { Route } from "./+types/projects";
@@ -67,7 +64,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Projects() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const projects = useLoaderData() as Array<
     Project & { links: { url: string; media: string }[] }
   >;
@@ -82,13 +78,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header
-        showBackButton={true}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
-
+    <>
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto text-center">
@@ -167,9 +157,11 @@ export default function Projects() {
               お気軽にお声がけください。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Contact YJN279
-              </Button>
+              <Link to="/profile">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                  Contact YJN279
+                </Button>
+              </Link>
               <Link to="/">
                 <Button variant="outline" size="lg">
                   <ArrowLeft className="h-4 w-4 mr-2" />
@@ -180,8 +172,6 @@ export default function Projects() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

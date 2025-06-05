@@ -41,30 +41,24 @@ export function Header({
             <>
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
-                <a
-                  href="#connecting-flights"
+                <Link
+                  to="/projects"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Projects
-                </a>
-                <a
-                  href="#briefing-room"
+                </Link>
+                <Link
+                  to="/articles"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Articles
-                </a>
-                <a
-                  href="#flight-log"
+                </Link>
+                <Link
+                  to="/profile"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
-                  Experience
-                </a>
-                <a
-                  href="#contact"
-                  className="text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  Contact
-                </a>
+                  Profile
+                </Link>
               </nav>
 
               {/* Mobile Menu Button */}

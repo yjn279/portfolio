@@ -1,6 +1,4 @@
 import { ArticleList } from "@/components/articles/article-list";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -239,7 +237,6 @@ export function meta(_: Route.MetaArgs) {
 
 export default function Articles() {
   const { articles } = useLoaderData<typeof loader>();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("latest");
   const [selectedPlatforms, setSelectedPlatforms] = useState<PlatformType[]>(
     [],
@@ -384,13 +381,7 @@ export default function Articles() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
-      <Header
-        showBackButton={true}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
-
+    <>
       {/* Hero Section - Flight Briefing Style */}
       <section className="relative py-16 px-4 bg-white overflow-hidden">
         {/* Background Pattern */}
@@ -645,8 +636,6 @@ export default function Articles() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

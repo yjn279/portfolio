@@ -1,43 +1,38 @@
+import { Link } from "react-router";
+
 interface MobileMenuProps {
   isOpen: boolean;
-  onScrollToSection: (sectionId: string) => void;
+  onClose: () => void;
 }
 
-export function MobileMenu({ isOpen, onScrollToSection }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   if (!isOpen) return null;
 
   return (
     <div className="md:hidden border-t bg-white/95 backdrop-blur-sm">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex flex-col space-y-4">
-          <button
-            type="button"
-            onClick={() => onScrollToSection("connecting-flights")}
+          <Link
+            to="/projects"
+            onClick={onClose}
             className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
           >
             Projects
-          </button>
-          <button
-            type="button"
-            onClick={() => onScrollToSection("briefing-room")}
+          </Link>
+          <Link
+            to="/articles"
+            onClick={onClose}
             className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
           >
             Articles
-          </button>
-          <button
-            type="button"
-            onClick={() => onScrollToSection("flight-log")}
+          </Link>
+          <Link
+            to="/profile"
+            onClick={onClose}
             className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
           >
-            Experience
-          </button>
-          <button
-            type="button"
-            onClick={() => onScrollToSection("contact")}
-            className="text-gray-600 hover:text-blue-600 transition-colors py-2 text-left"
-          >
-            Contact
-          </button>
+            Profile
+          </Link>
         </div>
       </nav>
     </div>
