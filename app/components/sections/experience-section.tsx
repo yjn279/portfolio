@@ -59,7 +59,7 @@ function ExperienceCard({ experience }: ExperienceCardProps) {
 
 export function ExperienceSection() {
   return (
-    <section id="flight-log" className="py-16 px-4 bg-white">
+    <section id="flight-log" className="py-16 px-4">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Flight Log</h2>

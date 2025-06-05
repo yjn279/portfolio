@@ -58,7 +58,7 @@ export function ProjectsSection() {
   const featuredProjects = projects.slice(0, 3);
 
   return (
-    <section id="connecting-flights" className="py-16 px-4 bg-white">
+    <section id="connecting-flights" className="py-16 px-4">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
