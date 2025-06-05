@@ -12,4 +12,13 @@ export const projects = sqliteTable('projects', {
   tags: text('tags', { mode: 'json' }).notNull(), // JSON配列でタグ管理
   created: text('created').notNull().default(sql`(CURRENT_TIMESTAMP)`),
   updated: text('updated').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const projectLinks = sqliteTable('project_links', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  url: text('url').notNull(),
+  media: text('media', { enum: ['GitHub', 'Note', 'SpeakerDeck', 'Qiita', 'Zenn'] }).notNull(),
+  projectId: integer('project_id').notNull().references(() => projects.id),
+  created: text('created').notNull().default(sql`(CURRENT_TIMESTAMP)`),
+  updated: text('updated').notNull().default(sql`(CURRENT_TIMESTAMP)`),
 }); 

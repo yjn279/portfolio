@@ -44,27 +44,40 @@ export function meta(_: Route.MetaArgs) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const db = drizzle(env.DB);
-  const result = await db.select().from(schema.projects).all();
-  // DBの値をUI用Project型にマッピング
-  return result.map((row) => ({
+  const projectsResult = await db.select().from(schema.projects).all();
+  const linksResult = await db.select().from(schema.projectLinks).all();
+
+  // projectIdごとにリンクをグループ化
+  const linksByProject: Record<string, { url: string; media: string }[]> = {};
+  for (const link of linksResult) {
+    const pid = String(link.projectId);
+    if (!linksByProject[pid]) linksByProject[pid] = [];
+    linksByProject[pid].push({ url: link.url, media: link.media });
+  }
+
+  // DBの値をUI用Project型+linksにマッピング
+  return projectsResult.map((row) => ({
     id: String(row.id),
     title: row.title,
     description: row.description,
-    longDescription: row.description, // DBにlongDescriptionがなければdescriptionで代用
+    longDescription: row.description,
     tags: typeof row.tags === 'string' ? JSON.parse(row.tags) : row.tags,
-    github: row.url,
-    demo: row.url,
-    slides: null,
-    status: undefined,
-    duration: undefined,
-    team: undefined,
-    featured: undefined,
+    links: linksByProject[String(row.id)] || [],
   }));
 }
 
 export default function Projects() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const projects = useLoaderData() as Project[];
+  const projects = useLoaderData() as Array<Project & { links: { url: string; media: string }[] }>;
+
+  // media名→アイコンコンポーネント
+  const mediaIcon = {
+    GitHub: Github,
+    Note: ExternalLink,
+    SpeakerDeck: Plane,
+    Qiita: ExternalLink,
+    Zenn: ExternalLink,
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
@@ -113,12 +126,14 @@ export default function Projects() {
                     ))}
                   </div>
                   <div className="flex gap-2">
-                    <a href={project.github} className="p-1 hover:bg-gray-100 rounded">
-                      <Github className="h-4 w-4" />
-                    </a>
-                    <a href={project.demo} className="p-1 hover:bg-gray-100 rounded">
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
+                    {project.links.map((link) => {
+                      const Icon = mediaIcon[link.media as keyof typeof mediaIcon] || ExternalLink;
+                      return (
+                        <a key={link.url} href={link.url} className="p-1 hover:bg-gray-100 rounded" target="_blank" rel="noopener noreferrer">
+                          <Icon className="h-4 w-4" />
+                        </a>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>

@@ -34,3 +34,19 @@ INSERT INTO projects (
   "https://yjn279.pages.dev",
   '["React Router v7","TypeScript","Tailwind CSS","Cloudflare","shadcn/ui"]'
 );
+
+INSERT INTO project_links (project_id, url, media) VALUES
+  (1, "https://github.com/yjn279/ecommerce", "GitHub"),
+  (1, "https://ecommerce-demo.vercel.app", "Note"),
+  (1, "https://slides.com/yjn279/ecommerce", "SpeakerDeck"),
+  (2, "https://github.com/yjn279/task-manager", "GitHub"),
+  (2, "https://task-manager-demo.vercel.app", "Note"),
+  (3, "https://github.com/yjn279/weather-dashboard", "GitHub"),
+  (3, "https://weather-dashboard-demo.vercel.app", "Note"),
+  (3, "https://slides.com/yjn279/weather", "SpeakerDeck"),
+  (4, "https://github.com/yjn279/blog-cms", "GitHub"),
+  (4, "https://blog-cms-demo.vercel.app", "Note"),
+  (5, "https://github.com/yjn279/chat-app", "GitHub"),
+  (5, "https://chat-app-demo.herokuapp.com", "Note"),
+  (6, "https://github.com/yjn279/portfolio", "GitHub"),
+  (6, "https://yjn279.pages.dev", "Note");
