@@ -1,13 +1,10 @@
 import { FloatingContactButton } from "@/components/floating-contact-button";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
-import { MobileMenu } from "@/components/layout/mobile-menu";
+import { Footer } from "@/components/layout/Footer";
 import { ArticlesSection } from "@/components/sections/articles-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { ExperienceSection } from "@/components/sections/experience-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
-import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import type { Route } from "./+types/home";
 
 export function meta(_: Route.MetaArgs) {
@@ -26,21 +23,8 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Portfolio() {
-  const { isMobileMenuOpen, toggleMobileMenu, scrollToSection } =
-    useMobileMenu();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={toggleMobileMenu}
-      />
-
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onScrollToSection={scrollToSection}
-      />
-
       <HeroSection />
       <ProjectsSection />
       <ArticlesSection />

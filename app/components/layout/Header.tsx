@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Menu, Plane, X } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 interface HeaderProps {
   isMobileMenuOpen: boolean;
@@ -17,6 +17,9 @@ export function Header({
   title = "Flight YJN279",
   subtitle = "Web Engineer Portfolio",
 }: HeaderProps) {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   return (
     <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -31,7 +34,7 @@ export function Header({
             </div>
           </Link>
 
-          {showBackButton ? (
+          {showBackButton || !isHome ? (
             <Link to="/">
               <Button variant="outline" size="sm">
                 Back to Home
@@ -41,30 +44,24 @@ export function Header({
             <>
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
-                <a
-                  href="#connecting-flights"
+                <Link
+                  to="/projects"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Projects
-                </a>
-                <a
-                  href="#briefing-room"
+                </Link>
+                <Link
+                  to="/articles"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Articles
-                </a>
-                <a
-                  href="#flight-log"
+                </Link>
+                <Link
+                  to="/profile"
                   className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
-                  Experience
-                </a>
-                <a
-                  href="#contact"
-                  className="text-gray-600 hover:text-blue-600 transition-colors"
-                >
-                  Contact
-                </a>
+                  Profile
+                </Link>
               </nav>
 
               {/* Mobile Menu Button */}

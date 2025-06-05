@@ -1,6 +1,4 @@
-import { env } from "cloudflare:workers";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,26 +8,33 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  getFeaturedProjects,
-  getOtherProjects,
-  projects,
-} from "@/data/projects";
+import { projects as projectsFromDB } from "@/data/projects";
 import type { Project } from "@/types";
-import { drizzle } from "drizzle-orm/d1";
 import {
-  ArrowLeft,
-  Calendar,
+  ArrowRight,
   ExternalLink,
   Github,
   Plane,
-  Star,
-  Users,
 } from "lucide-react";
-import { useState } from "react";
-import { Link, useLoaderData } from "react-router";
-import * as schema from "../../database/schema";
+import { data, useLoaderData } from "react-router";
 import type { Route } from "./+types/projects";
+
+export async function loader() {
+  // データベースから取得
+  const projects = projectsFromDB;
+
+  // プロジェクトとリンクをJOINしてレスポンス
+  const projectsWithLinks = projects.map((project) => ({
+    ...project,
+    links: [
+      { url: project.github, media: "GitHub" },
+      { url: project.demo, media: "Note" },
+      ...(project.slides ? [{ url: project.slides, media: "SpeakerDeck" }] : []),
+    ],
+  }));
+
+  return data(projectsWithLinks);
+}
 
 export function meta(_: Route.MetaArgs) {
   return [
@@ -37,37 +42,12 @@ export function meta(_: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "YJN279の開発プロジェクト一覧。フルスタックWebエンジニアとして手がけたプロダクトやアプリケーションをご紹介します。",
+        "YJN279が手がけたプロジェクト一覧。フルスタックWebエンジニアとして開発したアプリケーションやサービスをご紹介します。",
     },
   ];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const db = drizzle(env.DB);
-  const projectsResult = await db.select().from(schema.projects).all();
-  const linksResult = await db.select().from(schema.projectLinks).all();
-
-  // projectIdごとにリンクをグループ化
-  const linksByProject: Record<string, { url: string; media: string }[]> = {};
-  for (const link of linksResult) {
-    const pid = String(link.projectId);
-    if (!linksByProject[pid]) linksByProject[pid] = [];
-    linksByProject[pid].push({ url: link.url, media: link.media });
-  }
-
-  // DBの値をUI用Project型+linksにマッピング
-  return projectsResult.map((row) => ({
-    id: String(row.id),
-    title: row.title,
-    description: row.description,
-    longDescription: row.description,
-    tags: typeof row.tags === "string" ? JSON.parse(row.tags) : row.tags,
-    links: linksByProject[String(row.id)] || [],
-  }));
-}
-
 export default function Projects() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const projects = useLoaderData() as Array<
     Project & { links: { url: string; media: string }[] }
   >;
@@ -83,12 +63,6 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
-      <Header
-        showBackButton={true}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
-
       {/* Hero Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto text-center">
@@ -172,7 +146,7 @@ export default function Projects() {
               </Button>
               <Link to="/">
                 <Button variant="outline" size="lg">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  <ArrowRight className="h-4 w-4 mr-2" />
                   Back to Home
                 </Button>
               </Link>

@@ -1,6 +1,5 @@
 import { ArticleList } from "@/components/articles/article-list";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -385,12 +384,6 @@ export default function Articles() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
-      <Header
-        showBackButton={true}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      />
-
       {/* Hero Section - Flight Briefing Style */}
       <section className="relative py-16 px-4 bg-white overflow-hidden">
         {/* Background Pattern */}
@@ -571,7 +564,7 @@ export default function Articles() {
             ))}
           </div>
 
-          {filteredArticles.length === 0 && (
+          {sortedArticles.length === 0 && (
             <div className="text-center py-20">
               <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Plane className="h-12 w-12 text-blue-600" />

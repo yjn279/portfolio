@@ -8,6 +8,9 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { Header } from "@/components/layout/Header";
+import { MobileMenu } from "@/components/layout/mobile-menu";
+import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -42,7 +45,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const { isMobileMenuOpen, toggleMobileMenu } = useMobileMenu();
+
+  return (
+    <>
+      <Header
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={toggleMobileMenu}
+      />
+      <MobileMenu isOpen={isMobileMenuOpen} />
+      <Outlet />
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
