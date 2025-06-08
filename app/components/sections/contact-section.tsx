@@ -4,7 +4,10 @@ import { Link } from "react-router";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="py-16 px-4  bg-gradient-to-t from-sky-50 to-white">
+    <section
+      id="contact"
+      className="py-16 px-4  bg-gradient-to-t from-sky-50 to-white"
+    >
       <div className="container mx-auto text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">

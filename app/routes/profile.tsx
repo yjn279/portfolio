@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { HeroSection } from "@/components/sections/hero-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +35,7 @@ import {
   Music,
   Plane,
   Twitter,
+  User,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -56,29 +58,35 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
       <Header
-        showBackButton={true}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        title="Flight YJN279"
+        subtitle="Profile - Captain Details"
       />
 
-      {/* Hero Section */}
+      <HeroSection
+        icon={<User className="h-4 w-4" />}
+        badgeText="CAPTAIN PROFILE"
+        title="NAKAMURA Yuji"
+        subtitle="YJN279"
+        description={
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+            フルスタックWebエンジニアとして5年の経験を持ち、
+            モダンな技術スタックでユーザー体験を向上させるプロダクト開発に取り組んでいます。
+          </p>
+        }
+        bottomText={
+          <span className="text-muted-foreground">
+            Learn more about the captain
+          </span>
+        }
+        showScrollChevron={true}
+      />
+
+      {/* Profile Details Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Plane className="h-4 w-4" />
-                Captain Profile
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                NAKAMURA Yuji
-              </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-                フルスタックWebエンジニアとして5年の経験を持ち、
-                モダンな技術スタックでユーザー体験を向上させるプロダクト開発に取り組んでいます。
-              </p>
-            </div>
-
             {/* Profile Card */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16">
               <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-6 md:p-8 rounded-2xl">

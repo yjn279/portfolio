@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { HeroSection } from "@/components/sections/hero-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,7 @@ import { drizzle } from "drizzle-orm/d1";
 import {
   ArrowLeft,
   Calendar,
+  Clock,
   ExternalLink,
   Github,
   Plane,
@@ -84,27 +86,27 @@ export default function Projects() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
       <Header
-        showBackButton={true}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        title="Flight YJN279"
+        subtitle="Projects - Connecting Flights"
       />
 
-      {/* Hero Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Plane className="h-4 w-4" />
-            Connecting Flights
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Development Projects
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+      <HeroSection
+        icon={<Plane className="h-4 w-4" />}
+        badgeText="Connecting Flights"
+        title="Development Projects"
+        description={
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
             フルスタックWebエンジニアとして手がけたプロダクトやアプリケーションをご紹介します。
             モダンな技術スタックを活用し、ユーザー体験を重視した開発を心がけています。
           </p>
-        </div>
-      </section>
+        }
+        bottomText={
+          <span className="text-muted-foreground">Explore projects below</span>
+        }
+        showScrollChevron={true}
+      />
 
       {/* Projects 3列グリッド表示 */}
       <section className="py-16 px-4">

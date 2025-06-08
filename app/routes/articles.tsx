@@ -1,6 +1,7 @@
 import { ArticleList } from "@/components/articles/article-list";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { HeroSection } from "@/components/sections/hero-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -386,39 +387,27 @@ export default function Articles() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
       <Header
-        showBackButton={true}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        title="Flight YJN279"
+        subtitle="Articles - Briefing Room"
       />
 
-      {/* Hero Section - Flight Briefing Style */}
-      <section className="relative py-16 px-4 bg-white overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-10 left-10 text-blue-600">
-            <Plane className="h-32 w-32 rotate-45" />
-          </div>
-          <div className="absolute bottom-10 right-10 text-blue-600">
-            <Plane className="h-24 w-24 -rotate-12" />
-          </div>
-          <div className="absolute top-1/2 left-1/4 text-blue-600">
-            <Plane className="h-16 w-16 rotate-12" />
-          </div>
-        </div>
-
-        <div className="relative container mx-auto text-center">
-          <div className="inline-flex items-center gap-3 bg-blue-600 text-white px-6 py-3 rounded-full text-sm font-medium mb-8 shadow-lg">
-            <BookOpen className="h-4 w-4" />
-            <span className="tracking-wide">BRIEFING ROOM</span>
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 tracking-tight">
-            Knowledge
-          </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            技術記事、思考の記録、開発の知見を共有するブリーフィングルーム
+      <HeroSection
+        icon={<BookOpen className="h-4 w-4" />}
+        badgeText="BRIEFING ROOM"
+        title="Knowledge Archive"
+        description={
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+            技術記事、思考の記録、開発の知見を共有するブリーフィングルーム。
+            Zenn、Qiita、Noteで発信している最新情報をまとめてお届けします。
           </p>
-        </div>
-      </section>
+        }
+        bottomText={
+          <span className="text-muted-foreground">Browse articles below</span>
+        }
+        showScrollChevron={true}
+      />
 
       {/* Articles Section */}
       <section className="py-16 px-4">

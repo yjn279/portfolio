@@ -7,7 +7,9 @@ import { ContactSection } from "@/components/sections/contact-section";
 import { ExperienceSection } from "@/components/sections/experience-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
-import { useMobileMenu } from "@/hooks/use-mobile-menu";
+import { Clock } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router";
 import type { Route } from "./+types/home";
 
 export function meta(_: Route.MetaArgs) {
@@ -16,7 +18,7 @@ export function meta(_: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "YJN279のポートフォリオサイト。フルスタックWebエンジニアとして、モダンな技術スタックでユーザー体験を向上させるプロダクト開発に取り組んでいます。",
+        "Welcome aboard Flight YJN279. NAKAMURA Yujiのポートフォリオサイトです。フルスタックWebエンジニアとしてのプロジェクト、技術記事、経歴をご紹介します。",
     },
   ];
 }
@@ -25,15 +27,22 @@ export function loader({ context }: Route.LoaderArgs) {
   return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
 }
 
-export default function Portfolio() {
-  const { isMobileMenuOpen, toggleMobileMenu, scrollToSection } =
-    useMobileMenu();
+export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <div className="min-h-screen">
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
-        onToggleMobileMenu={toggleMobileMenu}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
       <MobileMenu
@@ -41,7 +50,7 @@ export default function Portfolio() {
         onScrollToSection={scrollToSection}
       />
 
-      <HeroSection />
+      <HeroSection icon={<Clock className="h-4 w-4" />} />
       <ProjectsSection />
       <ArticlesSection />
       <ExperienceSection />
