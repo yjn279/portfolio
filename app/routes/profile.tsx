@@ -18,7 +18,6 @@ import {
   skills,
 } from "@/data/profile";
 import {
-  ArrowLeft,
   Award,
   Building,
   Calendar,
@@ -508,32 +507,7 @@ export default function Profile() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto text-center">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Let's Connect
-            </h2>
-            <p className="text-gray-600 mb-8">
-              新しいプロジェクトやコラボレーションの機会をお待ちしています。
-              お気軽にお声がけください。
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                <Mail className="h-4 w-4 mr-2" />
-                Contact YJN279
-              </Button>
-              <Link to="/">
-                <Button variant="outline" size="lg">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Home
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       <Footer />
     </div>

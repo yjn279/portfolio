@@ -576,64 +576,7 @@ export default function Articles() {
         </div>
       </section>
 
-      {/* CTA Section - Final Boarding Call */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-        <div className="container mx-auto text-center">
-          <div className="max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Plane className="h-8 w-8" />
-              <h2 className="text-4xl font-bold">Final Boarding Call</h2>
-            </div>
-            <p className="text-xl text-blue-100 mb-12">
-              最新のフライト情報や技術記事をお見逃しなく。お好みのプラットフォームでフォローして、新しい知見の旅にご参加ください。
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-3 font-semibold"
-                asChild
-              >
-                <a
-                  href="https://zenn.dev/yuji207"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Board Zenn Flight
-                </a>
-              </Button>
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-3 font-semibold"
-                asChild
-              >
-                <a
-                  href="https://qiita.com/yjn279"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Board Qiita Flight
-                </a>
-              </Button>
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-blue-50 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 px-8 py-3 font-semibold"
-                asChild
-              >
-                <a
-                  href="https://note.com/yjn279"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Board Note Flight
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       <Footer />
     </div>
